@@ -3,6 +3,9 @@ from flask import Flask, request, make_response
 print("cats")
 app = Flask(__name__)
 
+# Last successful query made: Aug 1
+
+
 @app.route("/")
 def apartments():
     """
@@ -18,13 +21,13 @@ def apartments():
     lat = location["lat"]
     long = location["long"]
 
-    LAT_PADDING = 0.053241287376788904
-    LONG_PADDING = 0.04231452941894531
+    lat_padding = 0.053241287376788904
+    long_padding = 0.04231452941894531
 
-    lat_bound_up = lat + LAT_PADDING
-    lat_bound_down = lat - LAT_PADDING
-    long_bound_west = long + LONG_PADDING
-    long_bound_east = long - LONG_PADDING
+    lat_bound_up = lat + lat_padding  # calculated in the distance.py file
+    lat_bound_down = lat - lat_padding
+    long_bound_west = long + long_padding
+    long_bound_east = long - long_padding
 
     start = make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
