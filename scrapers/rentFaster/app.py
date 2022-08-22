@@ -53,3 +53,5 @@ def add_map_boundaries(lat1, long1, lat2, long2):
     # I believe the 'l' value references (a) zoom level and (b) center of the map as lat,long
     return f"l=11%2C45.5017%2C-73.5673&" \
            f"area=${lat1}%2C${long1}%2C${lat2}%2C${long2}&exclude="
+
+# flask run -h localhost -p 5002

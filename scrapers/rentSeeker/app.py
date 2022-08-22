@@ -59,3 +59,5 @@ def add_map_boundaries(lat1, long1, lat2, long2):
     return '{"params":"query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&' \
             'insideBoundingBox=%5B%5B${}%2C${}%2C${}%2C${}%5D"}'.format(lat1, long1, lat2, long2)
 
+
+# flask run -h localhost -p 5001

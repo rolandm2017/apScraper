@@ -37,12 +37,12 @@ def apartments():
     }
     r = s.get(start, headers=headers)
 
-    apartments = r.json()
+    results = r.json()
     # print(text.json(), "19rm")
 
     # print(text.count("propertyId"))
-    print(lat, long, len(apartments))
-    return apartments
+    print(lat, long, len(results))
+    return results
 
 
 def make_query_string(lat1, long1, lat2, long2):
@@ -56,8 +56,16 @@ def make_query_string(lat1, long1, lat2, long2):
             f"mapBounds%22:%7B%22"
             f"north%22:%7B%22lat%22:{lat1},%22lng%22:{long1}%7D,%22"
             f"south%22:%7B%22lat%22:{lat2},%22lng%22:{long2}%7D%7D,%22keyword%22:null,%22furnished%22:null%7D")
-# original string: "https://www.rentcanada.com/api/map-markers?filters=%7B%22amenities%22:%7B%22checklist%22:[]%7D,%22utilities%22:%7B%22checklist%22:[]%7D,%22petPolicies%22:%7B%22checklist%22:[]%7D,%22rentalTypes%22:%7B%22checklist%22:[]%7D,%22beds%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22baths%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22rates%22:%7B%22min%22:null,%22max%22:null%7D,%22sqft%22:%7B%22min%22:null,%22max%22:null%7D,%22mapBounds%22:%7B%22north%22:%7B%22lat%22:45.553102184226546,%22lng%22:-73.5512056051919%7D,%22south%22:%7B%22lat%22:45.44661960947297,%22lng%22:-73.63583466402979%7D%7D,%22keyword%22:null,%22furnished%22:null%7D"
+# original string: "https://www.rentcanada.com/api/map-markers?filters=%7B%22amenities%22:%7B%22checklist%22:[]%7D,
+# %22utilities%22:%7B%22checklist%22:[]%7D,%22petPolicies%22:%7B%22checklist%22:[]%7D,%22rentalTypes%22:%7B%22checklist
+# %22:[]%7D,%22beds%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22baths%22:%7B%22min%22:null,%22max
+# %22:null,%22checklist%22:[]%7D,%22rates%22:%7B%22min%22:null,%22max%22:null%7D,%22sqft%22:%7B%22min%22:null,%22max
+# %22:null%7D,%22mapBounds%22:%7B%22north%22:%7B%22lat%22:45.553102184226546,%22lng%22:-73.5512056051919%7D,%22south
+# %22:%7B%22lat%22:45.44661960947297,%22lng%22:-73.63583466402979%7D%7D,%22keyword%22:null,%22furnished%22:null%7D"
 
 # Example map box boundaries:
 # "north":{"lat":45.553102184226546,"lng":-73.5512056051919},
 # "south":{"lat":45.44661960947297,"lng":-73.63583466402979}}
+
+
+# flask run -h localhost -p 5000
