@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  canada:
+    build:
+      context: ./scrapers/rentCanada
+      dockerfile: Dockerfile
+#    image: "canada"
+    ports:
+      - "8082:8082"
+  faster:
+    build:
+      context: ./scrapers/rentFaster
+      dockerfile: Dockerfile
+#    image: "faster"
+    ports:
+      - "8083:8083"
+  seeker:
+    build:
+      context: ./scrapers/rentSeeker
+      dockerfile: Dockerfile
+#    image: "seeker"
+    ports:
+      - "8084:8084"
