@@ -2,9 +2,8 @@ import requests
 from flask import Flask, request, make_response
 print("cats")
 app = Flask(__name__)
-
-# Last successful query made: Aug 1
-
+from ..shared.ipgetter import get_proxy_ip
+from ..shared.checker import check_public_ip
 
 @app.route("/")
 def apartments():
@@ -14,6 +13,16 @@ def apartments():
     NOTE: In RentCanada's coordinate system, West is negative, East is positive.
     :return: A list of gyms.
     """
+    proxy_ip, proxy_port = get_proxy_ip(0)
+    http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
+    https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+    proxy = {"http": http_proxy_string, "https": https_proxy_string}
+    public_ip = check_public_ip(proxy)
+    if public_ip == proxy_ip:
+        pass
+    else:
+        print(public_ip, proxy_ip)
+        raise NotImplementedError("The expected proxy IP was different from public IP")
     location = request.json
     # city = location["city"]
     # state = location["state"]
@@ -32,6 +41,7 @@ def apartments():
     start = make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
     s = requests.Session()
+    s.proxies.update(proxy)
     headers = {
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
     }
@@ -66,6 +76,12 @@ def make_query_string(lat1, long1, lat2, long2):
 # Example map box boundaries:
 # "north":{"lat":45.553102184226546,"lng":-73.5512056051919},
 # "south":{"lat":45.44661960947297,"lng":-73.63583466402979}}
+
+@app.route("/import")
+def importer():
+    x = get_ip(0)
+    print(x)
+    return x
 
 
 # flask run -h localhost -p 5000
