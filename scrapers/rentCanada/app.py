@@ -1,9 +1,15 @@
 import requests
 from flask import Flask, request, make_response
+
 print("cats")
 app = Flask(__name__)
 
-# Last successful query made: Aug 1
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))  # necessary so util folder is available
+from util.ipgetter import get_proxy_ip
+from util.checker import check_public_ip
+
 
 
 @app.route("/")
@@ -14,6 +20,17 @@ def apartments():
     NOTE: In RentCanada's coordinate system, West is negative, East is positive.
     :return: A list of gyms.
     """
+    proxy_ip, proxy_port = get_proxy_ip(0)
+    http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
+    https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+    proxy = {"http": http_proxy_string, "https": https_proxy_string}
+    public_ip1, public_ip2 = check_public_ip(proxy)
+    print(public_ip1,public_ip2)
+    if public_ip1 == proxy_ip and public_ip2 == proxy_ip:
+        pass
+    else:
+        print(public_ip1, proxy_ip)
+        raise NotImplementedError("The expected proxy IP was different from public IP")
     location = request.json
     # city = location["city"]
     # state = location["state"]
@@ -32,6 +49,7 @@ def apartments():
     start = make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
     s = requests.Session()
+    s.proxies.update(proxy)
     headers = {
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
     }
@@ -67,5 +85,13 @@ def make_query_string(lat1, long1, lat2, long2):
 # "north":{"lat":45.553102184226546,"lng":-73.5512056051919},
 # "south":{"lat":45.44661960947297,"lng":-73.63583466402979}}
 
+@app.route("/health")
+def health():
+    return "working"
+
+print("d")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
 
 # flask run -h localhost -p 5000

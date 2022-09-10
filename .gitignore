@@ -7,4 +7,8 @@ venv
 /venv
 
 .env
+<<<<<<< HEAD
 proxies.txt
+=======
+.aps
+>>>>>>> ae08531f128628e8804d0d497021e35dfe44408a

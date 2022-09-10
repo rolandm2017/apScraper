@@ -3,6 +3,12 @@ from flask import Flask, request, make_response
 print("dogs")
 app = Flask(__name__)
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))  # necessary so util folder is available
+from util.ipgetter import get_proxy_ip
+from util.checker import check_public_ip
+
 # Last successful query made: Aug 1
 
 
