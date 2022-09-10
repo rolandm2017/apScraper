@@ -1,3 +1,4 @@
+import os
 import requests
 from flask import Flask, request, make_response
 
@@ -21,10 +22,16 @@ def apartments():
     :return: A list of gyms.
     """
     proxy_ip, proxy_port = get_proxy_ip(0)
-    http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
-    https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
-    proxy = {"http": http_proxy_string, "https": https_proxy_string}
-    public_ip1, public_ip2 = check_public_ip(proxy)
+    
+    username = os.environ.get("username2")
+    password = os.environ.get("password2")
+    proxy_string = f"http://{username}:{password}@{proxy_ip}:{proxy_port}"
+    proxy_dict = {"http": proxy_string, "https": proxy_string}
+
+    # http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
+    # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+    # proxy = {"http": http_proxy_string, "https": http_proxy_string}
+    public_ip1, public_ip2 = check_public_ip(proxy_dict)
     print(public_ip1,public_ip2)
     if public_ip1 == proxy_ip and public_ip2 == proxy_ip:
         pass
@@ -49,7 +56,7 @@ def apartments():
     start = make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
     s = requests.Session()
-    s.proxies.update(proxy)
+    s.proxies.update(proxy_dict)
     headers = {
         'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
     }
