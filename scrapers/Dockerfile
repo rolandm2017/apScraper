@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM 3.10.5-bullseye
+FROM python:3.10.5-bullseye
 WORKDIR /code
 ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0

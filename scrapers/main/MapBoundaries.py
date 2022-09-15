@@ -2,7 +2,7 @@ class MapBoundaries:
     def __init__(self, source):
         self.provider = source
 
-    def assign(self, lat1, long1, lat2, long2):
+    def add_map_boundaries(self, lat1, long1, lat2, long2):
         if self.provider == "rentCanada":
             pass
         elif self.provider == "rentFaster":

@@ -2,7 +2,7 @@ class QueryString:
     def __init__(self, source):
         self.provider = source
 
-    def make(self, lat1, long1, lat2, long2):
+    def make_query_string(self, lat1, long1, lat2, long2):
         if self.provider == None:
             pass
             # todo: throw error if provider not supplied (should be unusable unless provider is given)

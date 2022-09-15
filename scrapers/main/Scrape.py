@@ -1,22 +1,24 @@
 import requests
-from flask import Flask, request, make_response
+
 
 from ..shared.ipgetter import get_proxy_ip
 from ..shared.checker import check_public_ip
+from .QueryString import QueryString
+from .MapBoundaries import MapBoundaries
 
 class Scrape:
     def __init__(self, source):
         self.provider = source
 
-    def scrape(self):
+    def scrape(self, location):
         if self.provider == "rentCanada":
-            return self.scrapeRentCanada()
+            return self.scrapeRentCanada(location)
         elif self.provider == "rentFaster":
-            return self.scrapeRentFaster()
+            return self.scrapeRentFaster(location)
         elif self.provider == "rentSeeker":
-            return self.scrapeRentSeeker()
+            return self.scrapeRentSeeker(location)
 
-    def scrapeRentCanada(self, lat, long):
+    def scrapeRentCanada(self, location):
         """
             Uses lat and long to query RentCanada.com for apartments.
             Translation from city,state,country to lat and long must be done prior to this step.
@@ -33,7 +35,9 @@ class Scrape:
         else:
             print(public_ip, proxy_ip)
             raise NotImplementedError("The expected proxy IP was different from public IP")
-        location = request.json
+
+        # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
+
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
@@ -48,7 +52,7 @@ class Scrape:
         long_bound_west = long + long_padding
         long_bound_east = long - long_padding
 
-        start = make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
+        start = QueryString.make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         s = requests.Session()
         s.proxies.update(proxy)
@@ -64,7 +68,7 @@ class Scrape:
         print(lat, long, len(results))
         return results
 
-    def scrapeRentFaster(self):
+    def scrapeRentFaster(self, location):
         """
             Uses lat and long to query RentFaster.ca for apartments.
             Translation from city,state,country to lat and long must be done prior to this step.
@@ -72,7 +76,8 @@ class Scrape:
             :return: A list of gyms.
             """
 
-        location = request.json
+        # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
+
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
@@ -97,7 +102,7 @@ class Scrape:
 
         cookie2 = 'PHPSESSID=7185b866aede45c4c76dde286033f60a; _gcl_au=1.1.1499582163.1659423039; _ga=GA1.2.727073008.1659423039; _gid=GA1.2.1767852712.1659423039; _gat_UA-226906-1=1; _fbp=fb.1.1659423038865.1488717403; _tac=false~self|not-available; _ta=ca~1~9de8a34ae94473607d23d07f7008d925; _tas=rrnc9ie7jv8; lastcity=qc%2Fmontreal'
 
-        raw_text_body = add_map_boundaries(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
+        raw_text_body = MapBoundaries.add_map_boundaries(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         r = s.post(start, headers=headers, data=raw_text_body)  # its POST in this one
 
@@ -105,7 +110,7 @@ class Scrape:
         print(lat, long, len(results))
         return results
 
-    def scrapeRentSeeker(self):
+    def scrapeRentSeeker(self, location):
         """
         Uses lat and long to query RentCanada.com for apartments.
         Translation from city,state,country to lat and long must be done prior to this step.
@@ -113,7 +118,8 @@ class Scrape:
         :return: A list of gyms.
         """
 
-        location = request.json
+        # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
+
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
@@ -128,7 +134,7 @@ class Scrape:
         long_bound_west = long + long_padding
         long_bound_east = long - long_padding
 
-        start = make_query_string()
+        start = QueryString.make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         s = requests.Session()
         headers = {
@@ -136,7 +142,7 @@ class Scrape:
         }
 
         # raw_JSON_body = '{"params":"query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&insideBoundingBox=%5B%5B45.45344020494669%2C-73.65633240761402%2C45.6491408097154%2C-73.46235505165698%5D%5D"}'
-        raw_json_body = add_map_boundaries(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
+        raw_json_body = MapBoundaries.add_map_boundaries(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         r = s.post(start, headers=headers, data=raw_json_body)  # its POST in this one
 
