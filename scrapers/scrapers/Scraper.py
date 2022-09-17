@@ -1,9 +1,12 @@
 import requests
 
 from ..proxyTools.ipgetter import get_proxy_ip
-from ..proxyTools.checker import check_public_ip
+from ..proxyTools.checker import confirm_public_ip
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
+from ..api.internal import InternalAPI
+from ..api.websites import WebsitesAPI
+from ..api.ipTest import IPTestAPI
 
 class Scraper:
     def __init__(self, source):
@@ -35,11 +38,11 @@ class Scraper:
         http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
         https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
         proxy = {"http": http_proxy_string, "https": https_proxy_string}
-        public_ip = check_public_ip(proxy)
-        if public_ip == proxy_ip:
+        public_ip_is_correct = IPTestAPI.confirm_public_ip(proxy, proxy_ip)
+        if public_ip_is_correct:
             pass
         else:
-            print(public_ip, proxy_ip)
+            print(public_ip_is_correct, proxy_ip)
             # TODO: if proxy ip isn't set, retry setting it <= 5x
             raise NotImplementedError("The expected proxy IP was different from public IP")
 
@@ -59,7 +62,7 @@ class Scraper:
         long_bound_west = long + long_padding
         long_bound_east = long - long_padding
 
-        start = QueryString.make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
+        start = QueryString(self.provider).make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         s = requests.Session()
         s.proxies.update(proxy)
@@ -141,7 +144,7 @@ class Scraper:
         long_bound_west = long + long_padding
         long_bound_east = long - long_padding
 
-        start = QueryString.make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
+        start = QueryString(self.provider).make_query_string(lat_bound_up, long_bound_west, lat_bound_down, long_bound_east)
 
         s = requests.Session()
         headers = {
