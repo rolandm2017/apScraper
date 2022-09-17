@@ -6,9 +6,14 @@ from ..shared.checker import check_public_ip
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
 
-class Scrape:
+class Scraper:
     def __init__(self, source):
         self.provider = source
+        self.current_task = None
+
+    def accept_task(self, task):
+        self.current_task = task
+        self.scrape(task)
 
     def scrape(self, location):
         if self.provider == "rentCanada":
