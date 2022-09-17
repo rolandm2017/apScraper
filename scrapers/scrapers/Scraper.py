@@ -1,8 +1,7 @@
 import requests
 
-
-from ..shared.ipgetter import get_proxy_ip
-from ..shared.checker import check_public_ip
+from ..proxyTools.ipgetter import get_proxy_ip
+from ..proxyTools.checker import check_public_ip
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
 
@@ -15,15 +14,17 @@ class Scraper:
         self.current_task = task
         self.scrape(task)
 
-    def scrape(self, location):
+    def scrape(self, task):
         if self.provider == "rentCanada":
-            return self.scrapeRentCanada(location)
+            return self.scrape_rent_canada(task)
         elif self.provider == "rentFaster":
-            return self.scrapeRentFaster(location)
+            return self.scrape_rent_faster(task)
         elif self.provider == "rentSeeker":
-            return self.scrapeRentSeeker(location)
+            return self.scrape_rent_seeker(task)
+        else:
+            raise ValueError("invalid scraper type")
 
-    def scrapeRentCanada(self, location):
+    def scrape_rent_canada(self, task):
         """
             Uses lat and long to query RentCanada.com for apartments.
             Translation from city,state,country to lat and long must be done prior to this step.
@@ -39,6 +40,7 @@ class Scraper:
             pass
         else:
             print(public_ip, proxy_ip)
+            # TODO: if proxy ip isn't set, retry setting it <= 5x
             raise NotImplementedError("The expected proxy IP was different from public IP")
 
         # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
@@ -46,8 +48,8 @@ class Scraper:
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
-        lat = location["lat"]
-        long = location["long"]
+        lat = task["lat"]
+        long = task["long"]
 
         lat_padding = 0.053241287376788904
         long_padding = 0.04231452941894531
@@ -73,7 +75,7 @@ class Scraper:
         print(lat, long, len(results))
         return results
 
-    def scrapeRentFaster(self, location):
+    def scrape_rent_faster(self, task):
         """
             Uses lat and long to query RentFaster.ca for apartments.
             Translation from city,state,country to lat and long must be done prior to this step.
@@ -86,8 +88,8 @@ class Scraper:
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
-        lat = location["lat"]
-        long = location["long"]
+        lat = task["lat"]
+        long = task["long"]
 
         lat_padding = 0.0978503023843551  # calculated in the distance.py file
         long_padding = 0.09698867797851562
@@ -115,7 +117,7 @@ class Scraper:
         print(lat, long, len(results))
         return results
 
-    def scrapeRentSeeker(self, location):
+    def scrape_rent_seeker(self, task):
         """
         Uses lat and long to query RentCanada.com for apartments.
         Translation from city,state,country to lat and long must be done prior to this step.
@@ -128,8 +130,8 @@ class Scraper:
         # city = location["city"]
         # state = location["state"]
         # country = location["country"]
-        lat = location["lat"]
-        long = location["long"]
+        lat = task["lat"]
+        long = task["long"]
 
         lat_padding = 0.0978503023843551  # calculated in the distance.py file
         long_padding = 0.09698867797851562

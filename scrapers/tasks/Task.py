@@ -10,6 +10,7 @@ class Task:
         self.long = long
         self.viewport_width = viewport_width
         self.queue = queue
+        self.is_ready = True
 
     def forward_task_to_scraper(self, scraper):
         scraper.accept_task(self)

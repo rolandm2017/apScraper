@@ -31,7 +31,7 @@ proxyDict = {"http": proxy_string, "https": proxy_string}
 r = requests.get('https://api.my-ip.io/ip', proxies=proxyDict) # OK
 print(r.text)
 
-# the real test
+# the real tests
 proxy_string = f"http://{username}:{password}@{proxy_ip}:{proxy_port}"
 proxyDict = {"http": proxy_string, "https": proxy_string}
 r = requests.get('https://api.ipify.org', proxies=proxyDict) # OK

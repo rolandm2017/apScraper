@@ -1,4 +1,4 @@
-class ProviderType:
+class Provider:
     def __init__(self, source):
         self.provider = source  # the only place this should really need to be defined.
 
