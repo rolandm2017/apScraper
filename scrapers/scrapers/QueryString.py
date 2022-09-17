@@ -5,7 +5,7 @@ class QueryString:
     def make_query_string(self, lat1, long1, lat2, long2):
         if self.provider == None:
             raise ValueError("No provider added to QueryString class")
-            # todo: throw error if provider not supplied (should be unusable unless provider is given)
+
         if self.provider == "rentCanada":
             return (f"https://www.rentcanada.com/api/map-markers?filters=%7B%22amenities%22:%7B%22checklist%22:[]"
                     f"%7D,%22utilities%22:%7B%22checklist%22:[]%7D,%22petPolicies%22:%7B%22checklist%22:[]%7D,"

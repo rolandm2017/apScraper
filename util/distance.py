@@ -1,3 +1,8 @@
+# This file calculates the distance from the center of a map view to the borders of it
+# by taking the lat,long of all the apartments and sorting out, "which is the westernmost point?"
+# "which is the eastmost point? Which is the furthest north, south?"
+# and then dividing by 2 to get the distance from the middle to the right and left, top and bottom
+
 def calculate(value1, value2):
     if value1 > value2:
         return value1 - value2
@@ -69,3 +74,5 @@ print(calculate(long3, long4))
 # 0.4744720458984375
 # 0.0980427109436448  # lat is 1/4 wide as prev value -- I zoomed in twice
 # 0.10213851928710938  # long is 10/47 as wide as prev value (2x zoom)
+
+
