@@ -5,6 +5,8 @@ class WebsitesAPI:
         self.provider = source
 
     def scrape_rent_canada(self, start, proxy):
+        if proxy is None:
+            raise ValueError("No proxy supplied")
         s = requests.Session()
         s.proxies.update(proxy)
         headers = {
@@ -16,6 +18,8 @@ class WebsitesAPI:
         return results
 
     def scrape_rent_faster(self, start, proxy, map_boundary_info):
+        if proxy is None:
+            raise ValueError("No proxy supplied")
         s = requests.Session()
         s.proxies.update(proxy)
         headers = {
@@ -30,6 +34,8 @@ class WebsitesAPI:
         return results
 
     def scrape_rent_seeker(self, start, proxy, map_boundary_info):
+        if proxy is None:
+            raise ValueError("No proxy supplied")
         s = requests.Session()
         s.proxies.update(proxy)
         headers = {

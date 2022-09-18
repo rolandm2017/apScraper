@@ -1,29 +1,25 @@
 import requests
 from flask import Flask, request, make_response
 from time import sleep
-from sys import argv
 
 app = Flask(__name__)
 
 from .proxyTools.ipgetter import get_proxy_ip
-from .proxyTools.checker import check_public_ip
+from .proxyTools.checker import confirm_public_ip
 from .scrapers.Scraper import Scraper
 from .scrapers.Provider import Provider
+
+from .tasks.TaskQueue import TaskQueue
+from .tasks.Task import Task
 
 p = app.config["provider"]
 
 provider = Provider(p)  # todo: turn into command line argument?
 scraper = Scraper(provider)
-scraper.init(p)
+# scraper.init(p)
 
 @app.route("/")
 def apartments():
-    """
-    Uses lat and long to query RentCanada.com for apartments.
-    Translation from city,state,country to lat and long must be done prior to this step.
-    NOTE: In RentCanada's coordinate system, West is negative, East is positive.
-    :return: A list of gyms.
-    """
     scrape_details = request.json
 
     proxy_ip = scrape_details["proxy_ip"]
@@ -35,10 +31,18 @@ def apartments():
     results = scraper.scrape(scrape_details)
     return results
 
-@app.route("/tests")
+@app.route("/test")
 def test():
-    # wherein we find out if my OOP works or not
+    scrape_details = request.json
+    queue = TaskQueue(scrape_details["provider"])
+    task = Task(scrape_details["lat"], scrape_details["long"], scrape_details["zoomWidth"], queue)
+    scraper.refresh_proxy()
+    task.forward_task_to_scraper(scraper)
+    results = scraper.get_results()
+    return results
 
+@app.route("/activate")
+def main():
     task = scraper.ask_for_task()
     if task.is_ready:
         for index in range(0, 5):
@@ -72,7 +76,7 @@ def public_ip():
     return proxy_ip
 
 if __name__ == '__main__':
-    app.config['provider'] = argv[1]
+    # app.config['provider'] = argv[1]
     app.run()
 
 

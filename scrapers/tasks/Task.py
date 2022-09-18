@@ -18,4 +18,4 @@ class Task:
 
     def mark_complete(self):
         # tell the TaskQueue to mark it complete.
-        self.queue.mark_complete()
+        self.queue.mark_task_complete(self)
