@@ -1,16 +1,14 @@
-import requests
-from flask import Flask, request, make_response
+from flask import Flask, request
 from time import sleep
 
 app = Flask(__name__)
 
-from .proxyTools.ipgetter import get_proxy_ip
-from .proxyTools.checker import confirm_public_ip
-from .scrapers.Scraper import Scraper
-from .scrapers.Provider import Provider
+from proxyTools.ipgetter import get_proxy_ip
+from scrapers import Scraper
+from scrapers.Provider import Provider
 
-from .tasks.TaskQueue import TaskQueue
-from .tasks.Task import Task
+from tasks import TaskQueue
+from tasks import Task
 
 p = app.config["provider"]
 

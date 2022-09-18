@@ -1,13 +1,10 @@
-import requests
-
-from ..proxyTools.ipgetter import get_proxy_ip
-from ..proxyTools.checker import confirm_public_ip
+from proxyTools.ipgetter import get_proxy_ip
+from proxyTools.checker import confirm_public_ip
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
-from ..api.internal import InternalAPI
-from ..api.websites import WebsitesAPI
-from ..api.ipTest import IPTestAPI
+from api import WebsitesAPI
+
 
 class Scraper:
     def __init__(self, source):

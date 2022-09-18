@@ -1,4 +1,3 @@
-from scrapers.tasks import Task
-from scrapers.scrapers import Provider
+from scrapers import Provider
 
 provider = Provider("rentCanada")
