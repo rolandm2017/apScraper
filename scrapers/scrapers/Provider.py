@@ -1,6 +1,12 @@
+from enum import Enum
+
 class Provider:
+    rentCanada = "rentCanada"
+    rentFaster = "rentFaster"
+    rentSeeker = "rentSeeker"
+
     def __init__(self, source):
-        self.provider = source  # the only place this should really need to be defined.
+        self.type = source  # the only place this should really need to be defined.
 
     def get_type(self):
-        return self.provider
+        return self.type
