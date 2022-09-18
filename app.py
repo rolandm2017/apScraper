@@ -1,20 +1,44 @@
+from dotenv import load_dotenv
 from flask import Flask, request
 from time import sleep
+import os
 
 app = Flask(__name__)
 
-from proxyTools.ipgetter import get_proxy_ip
-from scrapers import Scraper
-from scrapers.Provider import Provider
+from .proxyTools.ipgetter import get_proxy_ip
+from .scrapers.Scraper import Scraper
+from .scrapers.Provider import Provider
 
-from tasks import TaskQueue
-from tasks import Task
+from .tasks import TaskQueue
+from .tasks import Task
 
-p = app.config["provider"]
+# print("cats")
+# def create_app(foo=None):
+#     app = Flask(__name__)
+#     app.config["foo"] = foo
+#     print(foo)
+#     print("+====")
+#     return app
+
+# an attempt
+# import click
+# @app.cli.command("create-user")
+# @click.argument("name")
+# def create_user(name):
+#     print(name)
+
+x = os.environ["TYPE"]
+print(x)
+
+p = "rentCanada"
 
 provider = Provider(p)  # todo: turn into command line argument?
 scraper = Scraper(provider)
 # scraper.init(p)
+
+@app.route("/pickProvider")
+def pick():
+    provider = request.json["provider"]
 
 @app.route("/")
 def apartments():
@@ -74,7 +98,6 @@ def public_ip():
     return proxy_ip
 
 if __name__ == '__main__':
-    # app.config['provider'] = argv[1]
     app.run()
 
 

@@ -1,9 +1,9 @@
-from proxyTools.ipgetter import get_proxy_ip
-from proxyTools.checker import confirm_public_ip
+from ..proxyTools.ipgetter import get_proxy_ip
+from ..proxyTools.checker import confirm_public_ip
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
-from api import WebsitesAPI
+from ..api.websites import WebsitesAPI
 
 
 class Scraper:

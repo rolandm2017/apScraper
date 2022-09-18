@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
 from ..api.proxy import ProxyAPI
 
-load_dotenv()
+# load_dotenv()
 
 token = os.environ.get("apikey")
 print(token)
