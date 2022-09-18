@@ -1,10 +1,11 @@
 from flask import Blueprint, request, render_template, abort
 
-from scrapers.Scraper import Scraper
+from ..scrapers import Scraper
+# from .,scrapers.Scraper import Scraper
 
-one_shot_scrape = Blueprint('one_shot_scrape', __name__)
+one_shot_scrape_blueprint = Blueprint('one_shot_scrape_blueprint', __name__)
 
-@one_shot_scrape.route("/")
+@one_shot_scrape_blueprint.route("/")
 def scrape():
     return "scraping..."
     # scrape_details = request.json

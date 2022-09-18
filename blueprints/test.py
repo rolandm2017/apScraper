@@ -3,9 +3,9 @@ from flask import Blueprint, request, render_template, abort
 from ..tasks import TaskQueue
 from ..tasks import Task
 
-test = Blueprint('test', __name__)
+test_blueprint = Blueprint('test_blueprint', __name__)
 
-@test.route("/test")
+@test_blueprint.route("/test")
 def test():
     return "test complete"
 #     scrape_details = request.json

@@ -9,8 +9,9 @@ from .scrapers.Provider import Provider
 from .tasks import TaskQueue
 from .tasks import Task
 
-from .blueprints.publicIp import public_ip
-# from .blueprints.test import test
+from .blueprints.publicIp import show_public_ip_blueprint
+from .blueprints.test import test_blueprint
+from .blueprints.oneShot import one_shot_scrape_blueprint
 
 
 p = "rentCanada"
@@ -21,8 +22,9 @@ scraper = Scraper(provider)
 
 app = Flask(__name__)
 
-app.register_blueprint(public_ip)
-# app.register_blueprint(test)
+app.register_blueprint(show_public_ip_blueprint)
+app.register_blueprint(test_blueprint)
+app.register_blueprint(one_shot_scrape_blueprint)
 
 # @app.route("/pickProvider")
 # def pick():
