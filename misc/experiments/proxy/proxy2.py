@@ -17,8 +17,8 @@ proxy2_port = os.environ.get("proxy2port")
 
 print(username, password, token)
 
-# r = requests.get("https://proxy.webshare.io/api/v2/proxy/list/?mode=direct&page=1&page_size=25", headers={"Authorization": f"Token {token}"})
-# print(r.text)
+r = requests.get("https://proxy.webshare.io/api/v2/proxy/list/?mode=direct&page=1&page_size=25", headers={"Authorization": f"Token {token}"})
+print(r.text)
 proxy_string = f"http://{username}:{password}@{proxy_ip}:{proxy_port}"
 proxyDict = {"http": proxy_string, "https": proxy_string}
 

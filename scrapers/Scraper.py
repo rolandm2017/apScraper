@@ -1,9 +1,11 @@
-from ..proxyTools.ipgetter import get_proxy_ip
-from ..proxyTools.checker import confirm_public_ip
+from util import get_proxy_ip
+from util import confirm_public_ip
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
 from ..api.websites import WebsitesAPI
+from ..api.internal import InternalAPI
+from scrapers.Task import Task
 
 
 class Scraper:
@@ -11,12 +13,13 @@ class Scraper:
         self.provider = source
         self.proxy_dict = None
         self.results = None
+        self.queue = None
 
     def refresh_proxy(self):
         proxy_ip, proxy_port = get_proxy_ip(0)
         http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
-        https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
-        proxy = {"http": http_proxy_string, "https": https_proxy_string}
+        # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+        proxy = {"http": http_proxy_string, "https": http_proxy_string}
         public_ip_is_correct = confirm_public_ip(proxy, proxy_ip)
         if public_ip_is_correct:
             self.proxy_dict = proxy
@@ -25,11 +28,20 @@ class Scraper:
             # TODO: if proxy ip isn't set, retry setting it <= 5x
             raise NotImplementedError("The expected proxy IP was different from public IP")
 
+    def ask_for_task(self):
+        details = InternalAPI(self.provider).ask_for_task()
+        task = Task(details["identifier"], details["lat"], details["long"], details["viewport_width"])
+        return task
+
     def accept_task(self, task):
         self.scrape(task)
 
     def get_results(self):
         return self.results
+    
+    def report_apartments(self):
+        report_was_successful = InternalAPI().report_findings(self.results)
+        return report_was_successful
 
     def scrape(self, task):
         if self.provider == Provider.rentCanada:
@@ -102,3 +114,4 @@ class Scraper:
         print(lat, long, len(results))
         self.results = results
         return results
+    

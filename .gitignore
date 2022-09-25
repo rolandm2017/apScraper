@@ -1,6 +1,6 @@
 .gyms
 .idea
-data
+misc/data
 
 /.gyms
 venv

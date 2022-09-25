@@ -3,8 +3,6 @@ from flask import Flask, request
 
 from .scrapers.Scraper import Scraper
 from .scrapers.Provider import Provider
-
-
 from .blueprints.publicIp import show_public_ip_blueprint
 from .blueprints.test import test_blueprint
 from .blueprints.oneShot import one_shot_scrape_blueprint

@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, abort, request
-from ..proxyTools.ipgetter import get_proxy_ip
-from ..proxyTools.checker import confirm_public_ip
+from flask import Blueprint, request
+from util import get_proxy_ip
+from util import confirm_public_ip
 
 show_public_ip_blueprint = Blueprint('show_public_ip_blueprint', __name__)
 

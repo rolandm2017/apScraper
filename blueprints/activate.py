@@ -1,11 +1,19 @@
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, current_app
+from time import sleep
 
-from
+from ..scrapers.Scraper import Scraper
+from ..scrapers.Provider import Provider
 
 activate_blueprint = Blueprint('activate_blueprint', __name__)
 
+
 @activate_blueprint.route("/activate")
 def main():
+    print("activated")
+    # return "Activated"
+    provider = Provider(current_app.config.get("provider"))
+    scraper = Scraper(provider)
+    print(scraper.provider, scraper.provider.type)
     task = scraper.ask_for_task()
     if task.is_ready:
         for index in range(0, 5):
@@ -13,7 +21,6 @@ def main():
             if scrape.was_successful:
                 scraper.report_apartments(scrape)
                 task.mark_complete(task)
-                scraper.queue.delete_from_queue(task)
                 break
             else:
                 # todo: determine type of failure. "is banned?" "429?"
@@ -28,5 +35,4 @@ def main():
         if scraper.queue_confirmed_empty():
             sleep(1 * 24 * 60 * 60)
         else:
-
             exit()
