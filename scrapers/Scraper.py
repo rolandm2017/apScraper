@@ -2,9 +2,9 @@ from ..util.proxyTools import ProxyTools
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
-from ..api.websites import WebsitesAPI
-from ..api.internal import InternalAPI
-from scrapers.Task import Task
+from ..api.websitesAPI import WebsitesAPI
+from ..api.internalAPI import InternalAPI
+from ..scrapers.Task import Task
 
 
 class Scraper:
@@ -16,12 +16,13 @@ class Scraper:
 
     def refresh_proxy(self):
         proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
-        http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
-        # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
-        proxy = {"http": http_proxy_string, "https": http_proxy_string}
-        public_ip_is_correct = ProxyTools().confirm_public_ip(proxy, proxy_ip)
+        # http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
+        # # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+        # proxy = {"http": http_proxy_string, "https": http_proxy_string}
+        proxy_dict = ProxyTools().create_proxy_dict(proxy_ip, proxy_port)
+        public_ip_is_correct = ProxyTools().confirm_public_ip(proxy_dict, proxy_ip)
         if public_ip_is_correct:
-            self.proxy_dict = proxy
+            self.proxy_dict = proxy_dict
         else:
             print(public_ip_is_correct, proxy_ip)
             # TODO: if proxy ip isn't set, retry setting it <= 5x

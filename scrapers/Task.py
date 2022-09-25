@@ -1,4 +1,4 @@
-from api.internal import InternalAPI
+from ..api.internalAPI import InternalAPI
 
 
 class Task:

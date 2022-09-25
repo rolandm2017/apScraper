@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 
-from scrapers import Task
+from ..scrapers.Task import Task
 
 test_blueprint = Blueprint('test_blueprint', __name__)
 

@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from ..api.proxy import ProxyAPI
+from ..api.proxyAPI import ProxyAPI
 
 load_dotenv()
 
