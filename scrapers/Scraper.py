@@ -1,5 +1,4 @@
-from util import get_proxy_ip
-from util import confirm_public_ip
+from ..util.proxyTools import ProxyTools
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
@@ -16,11 +15,11 @@ class Scraper:
         self.queue = None
 
     def refresh_proxy(self):
-        proxy_ip, proxy_port = get_proxy_ip(0)
+        proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
         http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
         # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
         proxy = {"http": http_proxy_string, "https": http_proxy_string}
-        public_ip_is_correct = confirm_public_ip(proxy, proxy_ip)
+        public_ip_is_correct = ProxyTools().confirm_public_ip(proxy, proxy_ip)
         if public_ip_is_correct:
             self.proxy_dict = proxy
         else:

@@ -11,7 +11,10 @@ class ProxyTools:
         pass
 
     def create_proxy_dict(self, ip, port):
-        http_proxy_string = "http://" + str(ip) + ":" + str(port)
+        username = os.environ.get("username")
+        password = os.environ.get("password")
+        http_proxy_string = f"http://{username}:{password}@{ip}:{port}"
+        # http_proxy_string = "http://" + str(ip) + ":" + str(port)
         # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
         proxy_dict = {"http": http_proxy_string, "https": http_proxy_string}
         return proxy_dict
