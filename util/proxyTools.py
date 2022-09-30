@@ -10,14 +10,7 @@ class ProxyTools:
     def __init__(self):
         pass
 
-    def create_proxy_dict(self, ip, port):
-        username = os.environ.get("username")
-        password = os.environ.get("password")
-        http_proxy_string = f"http://{username}:{password}@{ip}:{port}"
-        # http_proxy_string = "http://" + str(ip) + ":" + str(port)
-        # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
-        proxy_dict = {"http": http_proxy_string, "https": http_proxy_string}
-        return proxy_dict
+
 
     def get_proxy_ip(self, choice):
         token = os.environ.get("apikey")
@@ -26,6 +19,15 @@ class ProxyTools:
         selected_proxy_port = r.json()["results"][choice]["port"]
         print(selected_proxy_ip)
         return selected_proxy_ip, selected_proxy_port
+
+    def create_proxy_dict(self, ip, port):
+        username = os.environ.get("username")
+        password = os.environ.get("password")
+        http_proxy_string = f"http://{username}:{password}@{ip}:{port}"
+        # http_proxy_string = "http://" + str(ip) + ":" + str(port)
+        # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
+        proxy_dict = {"http": http_proxy_string, "https": http_proxy_string}
+        return proxy_dict
 
     def confirm_public_ip(self, proxy_dict, desired_ip):
         print(proxy_dict, desired_ip, "5rm")

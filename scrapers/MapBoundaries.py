@@ -5,27 +5,30 @@ class MapBoundaries:
         self.provider = source
 
     def make_boundaries(self, lat, long):
-        if self.provider == Provider.rentCanada:
+        if self.provider.type == Provider.rentCanada:
             lat_padding = 0.053241287376788904
             long_padding = 0.04231452941894531
-        elif self.provider == Provider.rentFaster:
+        elif self.provider.type == Provider.rentFaster:
             lat_padding = 0.0978503023843551  # calculated in the distance.py file
             long_padding = 0.09698867797851562
-        elif self.provider == Provider.rentSeeker:
+        elif self.provider.type == Provider.rentSeeker:
             lat_padding = 0.0978503023843551  # calculated in the distance.py file
             long_padding = 0.09698867797851562
         else:
             raise ValueError("No provider given in MapBoundaries")
 
-        lat_bound_up = lat + lat_padding  # calculated in the distance.py file
+        lat_bound_up = lat + lat_padding
         lat_bound_down = lat - lat_padding
         long_bound_west = long + long_padding
         long_bound_east = long - long_padding
+        # if self.provider == Provider.rentCanada:
+
         bounds_dict = {"north": lat_bound_up,
-                       "south": lat_bound_down,
-                       "east": long_bound_west,
-                       "west": long_bound_east
-                       }
+                   "south": lat_bound_down,
+                   "east": long_bound_east,
+                   "west": long_bound_west
+                   }
+            # return
         return bounds_dict
 
     def add_map_boundaries(self, lat1, long1, lat2, long2):

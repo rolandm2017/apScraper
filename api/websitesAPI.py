@@ -4,17 +4,20 @@ class WebsitesAPI:
     def __init__(self, source):
         self.provider = source
 
-    def scrape_rent_canada(self, start, proxy):
-        if proxy is None:
+    def scrape_rent_canada(self, start, proxy, use_proxy=True):
+        if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")
         s = requests.Session()
-        s.proxies.update(proxy)
+        if use_proxy:
+            print(proxy, "12rm")
+            s.proxies.update(proxy)
         headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
         }
 
         r = s.get(start, headers=headers)
         results = r.json()
+        # print(results, "18rm")
         return results
 
     def scrape_rent_faster(self, start, proxy, map_boundary_info):

@@ -10,12 +10,11 @@ def scrape():
     # return "scraping..."
     scrape_details = request.json
 
-    # proxy_ip = scrape_details["proxy_ip"]
-    # proxy_port = scrape_details["proxy_port"]
     provider = scrape_details["provider"]
 
     scraper = Scraper(provider)
     scraper.refresh_proxy()
 
     results = scraper.scrape(scrape_details)
+    print(results, "21rm")
     return results

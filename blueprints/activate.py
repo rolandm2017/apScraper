@@ -6,33 +6,31 @@ from ..scrapers.Provider import Provider
 
 activate_blueprint = Blueprint('activate_blueprint', __name__)
 
+MAX_RETRIES = 5
+END_OF_LOOP = MAX_RETRIES - 1
 
-@activate_blueprint.route("/activate")
+@activate_blueprint.route("/activate", methods=["POST"])
 def main():
     print("activated")
-    # return "Activated"
-    provider = Provider(current_app.config.get("provider"))
+    # print(current_app.config.get("provider"))
+    provider = request.args.get("provider")
+    provider = Provider(provider)
     scraper = Scraper(provider)
+    scraper.refresh_proxy()
     print(scraper.provider, scraper.provider.type)
-    task = scraper.ask_for_task()
-    if task.is_ready:
-        for index in range(0, 5):
-            scrape = scraper.scrape(task)
-            if scrape.was_successful:
+    tasks = scraper.ask_for_tasks()
+    print("TASKS: " + str(len(tasks)))
+    for i in range(0, len(tasks)):
+        for index in range(0, MAX_RETRIES):
+            scrape = scraper.scrape(tasks[i])
+            scrape_was_successful = len(scrape) > 0
+            if scrape_was_successful:
                 scraper.report_apartments(scrape)
-                task.mark_complete(task)
+                tasks[i].mark_complete()
+                scraper.reset()
                 break
             else:
                 # todo: determine type of failure. "is banned?" "429?"
                 scraper.add_failure_to_logs(scrape.issues)
-                if index < 4:
-                    scraper.retry(task)
-                else:
-                    scraper.report_failure_for(task)
-                pass
-    else:
-        # No task
-        if scraper.queue_confirmed_empty():
-            sleep(1 * 24 * 60 * 60)
-        else:
-            exit()
+                if index is END_OF_LOOP:
+                    scraper.report_failure_for(tasks[i])
