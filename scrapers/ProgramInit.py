@@ -1,10 +1,7 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 from celery import Celery
-from ..config.config import Config
-import logging
-from flask.logging import default_handler
-from logging.handlers import RotatingFileHandler
+from ..config import Config, DevelopmentConfig
 
 from ..blueprints.activate import activate_blueprint
 from ..blueprints.publicIp import show_public_ip_blueprint
@@ -25,8 +22,11 @@ def create_app():
 
     # Configure the flask app instance
     CONFIG_TYPE = os.getenv('CONFIG_TYPE', default='config.DevelopmentConfig')
-    app.config.from_object(CONFIG_TYPE)
-    # app.config = "test"
+    if CONFIG_TYPE == "config.DevelopmentConfig":
+        c = DevelopmentConfig
+    else:
+        c = Config
+    app.config.from_object(c)
 
     # Configure celery
     celery.conf.update(app.config)
