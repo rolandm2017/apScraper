@@ -10,6 +10,5 @@ from celery import shared_task
 # @current_app.celery.task(name="create_task")
 @shared_task(name='celery_tasks.create_task')
 def create_task(task_type):
-    time.sleep(int(task_type) * 20)
     print(task_type * 20)
     return True

@@ -2,17 +2,20 @@ from ..util.proxyTools import ProxyTools
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
-from ..api.websitesAPI import WebsitesAPI
-from ..api.internalAPI import InternalAPI
+# from ..api.websitesAPI import WebsitesAPI
+# from ..api.internalAPI import InternalAPI
+
 from ..scrapers.Task import Task
 
 
 class Scraper:
-    def __init__(self, source):
+    def __init__(self, source, internal_api, web_api):
         self.provider = source
         self.proxy_dict = None
         self.results = None
         self.queue = None
+        self.internalAPI = internal_api
+        self.webAPI = web_api
 
     def refresh_proxy(self):
         proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
@@ -29,7 +32,7 @@ class Scraper:
             raise NotImplementedError("The expected proxy IP was different from public IP")
 
     def ask_for_tasks(self):
-        task_details = InternalAPI(self.provider).ask_for_tasks()
+        task_details = self.internalAPI(self.provider).ask_for_tasks()
         tasks = []
         for d in task_details:
             task = Task(d["id"], d["lat"], d["long"], d["zoomWidth"])
@@ -43,15 +46,15 @@ class Scraper:
         return self.results
     
     def report_apartments(self, results):
-        report_was_successful = InternalAPI().report_findings(results)
+        report_was_successful = self.internalAPI().report_findings(results)
         return report_was_successful
 
     def scrape(self, task):
-        if self.provider.type == Provider.rentCanada:
+        if self.provider.get_type() == Provider.rentCanada:
             return self.scrape_rent_canada(task)
-        elif self.provider.type == Provider.rentFaster:
+        elif self.provider.get_type() == Provider.rentFaster:
             return self.scrape_rent_faster(task)
-        elif self.provider.type == Provider.rentSeeker:
+        elif self.provider.get_type() == Provider.rentSeeker:
             return self.scrape_rent_seeker(task)
         else:
             print(self.provider)
@@ -70,14 +73,10 @@ class Scraper:
         long = task.long  # task["long"]
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
-        # print(bounds, "70rm")
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
-        # print(start, "72rm")
         # No map boundaries needed here apparently
-        results = WebsitesAPI(self.provider).scrape_rent_canada(start, self.proxy_dict)
-        # print(text.count("propertyId"))
-        # print(lat, long, len(results))
-        # print(results, "75rm")
+        print(lat, long, bounds, start, self.proxy_dict, "78rm")
+        results = self.webAPI(self.provider).scrape_rent_canada(start, self.proxy_dict)
         self.results = results
         return results
 
@@ -89,15 +88,20 @@ class Scraper:
             :return: A list of apartments.
             """
         # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
-        lat = task["lat"]
-        long = task["long"]
+        lat = task.lat
+        long = task.long
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
-        results = WebsitesAPI(self.provider).scrape_rent_faster(start, self.proxy_dict, raw_text_body)
-        print(lat, long, len(results))
+        print(start)
+        print("\n")
+        print(self.proxy_dict)
+        print("\n")
+        print(raw_text_body)
+        print("\n")
+        results = self.webAPI(self.provider).scrape_rent_faster(start, self.proxy_dict, raw_text_body)
         self.results = results
         return results
 
@@ -109,15 +113,15 @@ class Scraper:
         :return: A list of apartments.
         """
         # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
-        lat = task["lat"]
-        long = task["long"]
+        lat = task.lat
+        long = task.long
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
-        results = WebsitesAPI(self.provider).scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
-        print(lat, long, len(results))
+
+        results = self.webAPI(self.provider).scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
         self.results = results
         return results
 

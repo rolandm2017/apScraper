@@ -7,6 +7,7 @@ from .tasks import create_task  # fixme: start2
 
 test_blueprint = Blueprint('test_blueprint', __name__)
 
+
 @test_blueprint.route("/test")
 def test():
     scrape_details = request.json
@@ -17,8 +18,7 @@ def test():
     scraper = []  # fixme: temp
     scraper.refresh_proxy()
     task.forward_task_to_scraper(scraper)
-    results = scraper.get_results()
-    return results
+    return scraper.get_results()
 
 
 @test_blueprint.route("/pretend_tasks", methods=["POST"])
@@ -46,7 +46,7 @@ def get_pretend_tasks():
     active = i.active()
     reserved = i.reserved()
 
-    print("\n\n")
+    print("\n=============")
     print("active:", active)
     print("reserved:", reserved)
     return "hi"

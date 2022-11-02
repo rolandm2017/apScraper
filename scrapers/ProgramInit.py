@@ -13,7 +13,8 @@ from ..blueprints.healthCheck import health_check_blueprint
 # # todo: make the same celery usable over multiple files
 
 ### Instantiate Celery ###
-celery = Celery(__name__, broker=Config.CELERY_BROKER_URL, result_backend=Config.RESULT_BACKEND)  # NEW!!!!!
+print("Name:", __name__)  # todo: change "rentCanada" to imported line
+celery = Celery("rentCanada", broker=Config.CELERY_BROKER_URL, result_backend=Config.RESULT_BACKEND)
 
 ### Application Factory ###
 def create_app():

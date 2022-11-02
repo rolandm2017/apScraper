@@ -20,8 +20,8 @@ class WebsitesAPI:
         # print(results, "18rm")
         return results
 
-    def scrape_rent_faster(self, start, proxy, map_boundary_info):
-        if proxy is None:
+    def scrape_rent_faster(self, start, proxy, map_boundary_info, use_proxy=True):
+        if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")
         s = requests.Session()
         s.proxies.update(proxy)
@@ -36,8 +36,8 @@ class WebsitesAPI:
         results = r.json()
         return results
 
-    def scrape_rent_seeker(self, start, proxy, map_boundary_info):
-        if proxy is None:
+    def scrape_rent_seeker(self, start, proxy, map_boundary_info, use_proxy=True):
+        if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")
         s = requests.Session()
         s.proxies.update(proxy)

@@ -6,6 +6,9 @@ from .scrapers.Provider import Provider
 from .scrapers.ProgramInit import create_app
 
 application = create_app()
+
+celery = application.celery
+
 #
 # if __name__ == '__main__':
 #   application.run()
