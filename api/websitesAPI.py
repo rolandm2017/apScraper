@@ -1,9 +1,11 @@
 import requests
 
-class WebsitesAPI:
-    def __init__(self, source):
-        self.provider = source
 
+class WebsitesAPI:
+    def __init__(self):
+        pass
+
+    @staticmethod
     def scrape_rent_canada(self, start, proxy, use_proxy=True):
         if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")
@@ -20,6 +22,7 @@ class WebsitesAPI:
         # print(results, "18rm")
         return results
 
+    @staticmethod
     def scrape_rent_faster(self, start, proxy, map_boundary_info, use_proxy=True):
         if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")
@@ -36,6 +39,7 @@ class WebsitesAPI:
         results = r.json()
         return results
 
+    @staticmethod
     def scrape_rent_seeker(self, start, proxy, map_boundary_info, use_proxy=True):
         if use_proxy is True and proxy is None:
             raise ValueError("No proxy supplied")

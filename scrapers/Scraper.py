@@ -15,7 +15,7 @@ class Scraper:
         self.results = None
         self.queue = None
         self.internalAPI = internal_api
-        self.webAPI = web_api
+        self.web_api = web_api
 
     def refresh_proxy(self):
         proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
@@ -76,7 +76,7 @@ class Scraper:
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         # No map boundaries needed here apparently
         print(lat, long, bounds, start, self.proxy_dict, "78rm")
-        results = self.webAPI(self.provider).scrape_rent_canada(start, self.proxy_dict)
+        results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
         self.results = results
         return results
 
@@ -95,13 +95,7 @@ class Scraper:
 
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
-        print(start)
-        print("\n")
-        print(self.proxy_dict)
-        print("\n")
-        print(raw_text_body)
-        print("\n")
-        results = self.webAPI(self.provider).scrape_rent_faster(start, self.proxy_dict, raw_text_body)
+        results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
         self.results = results
         return results
 
@@ -121,7 +115,7 @@ class Scraper:
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
 
-        results = self.webAPI(self.provider).scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
+        results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
         self.results = results
         return results
 
