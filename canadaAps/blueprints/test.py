@@ -2,6 +2,8 @@ from flask import Blueprint, request, current_app
 # from celery import task
 from celery import shared_task, current_app as current_celery_app
 
+from ..celeryTasks.celeryTasks import divide
+
 from canadaAps.scrapers.Task import Task
 
 # from ..scrapers.ProgramInit import celery
@@ -11,6 +13,7 @@ from canadaAps.scrapers.Task import Task
 # ##
 
 test_blueprint = Blueprint('test_blueprint', __name__)
+
 
 
 @test_blueprint.route("/test")
@@ -26,25 +29,35 @@ def test():
     return scraper.get_results()
 
 
-@test_blueprint.route("/pretend_tasks", methods=["POST"])
-@shared_task(name='celery_tasks.pretend')
-def pretend():
+from ..celeryTasks.celeryTasks import delayed_mathsss
+@test_blueprint.route("/pretend_tasks2", methods=["POST"])
+def pretend2():
     times = request.json["pretend"]
     print(times)
     responses = []
     for t in times:
-        # create_task.delay(int(t))
-        # todo: attach .celery to current_app  ( i think it is now)
-        print(t, "31rm")
-        print(current_app, "39rm")
-        async_result = current_app.celery.send_task("celery_tasks.pretend", args=[int(t)])
-        print(async_result, "33rm")
-        responses.append(async_result.id)
-        print(type(async_result))
-        # r = result_id.get()
-        # print('Processing is {}'.format(r))
-        # responses.append('Processing is {}'.format(r))
+        x = delayed_mathsss.apply_async(args=[t])
+        print(x)
+        responses.append(x.id)
     return responses
+
+# @test_blueprint.route("/pretend_tasks", methods=["POST"])
+# @shared_task(name='celery_tasks.pretend')
+# def pretend():
+#     times = request.json["pretend"]
+#     print(times)
+#     responses = []
+#     for t in times:
+#         print(t, "31rm")
+#         print(current_app, "39rm")
+#         # async_result = current_app.celery.send_task("celery_tasks.pretend", args=[int(t)])
+#         # print(async_result, "33rm")
+#         r = divide(t)
+#         print(r, "43rm")
+#         responses.append(r)
+#         # responses.append(async_result.id)
+#         # print(type(async_result))
+#     return responses
 
 @test_blueprint.route("/check_pretend")
 def get_pretend_tasks():
