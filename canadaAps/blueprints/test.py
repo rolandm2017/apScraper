@@ -2,8 +2,6 @@ from flask import Blueprint, request, current_app
 # from celery import task
 from celery import shared_task, current_app as current_celery_app
 
-from ..celeryTasks.celeryTasks import divide
-
 from canadaAps.scrapers.Task import Task
 
 # from ..scrapers.ProgramInit import celery
@@ -29,14 +27,14 @@ def test():
     return scraper.get_results()
 
 
-from ..celeryTasks.celeryTasks import delayed_mathsss
+from ..celeryTasks.celeryTasks import delayed_math
 @test_blueprint.route("/pretend_tasks2", methods=["POST"])
 def pretend2():
     times = request.json["pretend"]
     print(times)
     responses = []
     for t in times:
-        x = delayed_mathsss.apply_async(args=[t])
+        x = delayed_math.apply_async(args=[t])
         print(x)
         responses.append(x.id)
     return responses

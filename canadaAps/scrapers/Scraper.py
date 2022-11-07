@@ -2,6 +2,7 @@ from canadaAps.util.proxyTools import ProxyTools
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
+from .Scrape import Scrape
 
 from canadaAps.scrapers.Task import Task
 
@@ -10,10 +11,11 @@ class Scraper:
     def __init__(self, source, internal_api, web_api):
         self.provider = source
         self.proxy_dict = None
-        self.results = None
+        # self.results = None
         self.queue = None
         self.internal_api = internal_api
         self.web_api = web_api
+        self.issue_logs = []
 
     def refresh_proxy(self):
         proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
@@ -39,13 +41,22 @@ class Scraper:
 
     def accept_task(self, task):
         self.scrape(task)
+    #
+    # def get_results(self):
+    #     return self.results
 
-    def get_results(self):
-        return self.results
-    
-    def report_apartments(self, results):
-        report_was_successful = self.internal_api.report_findings(results)
+    def report_apartments_and_mark_complete(self, task, scrape):
+        report_was_successful = self.internal_api.report_findings_and_mark_complete(task, scrape.get_results())
         return report_was_successful
+
+    def add_failure_to_logs(self, scrape):
+        self.issue_logs.append(scrape)
+
+    def report_failure_for(self, task):
+        self.internal_api.report_failure_for(task, self.issue_logs)
+
+    def reset_logs(self):
+        self.issue_logs = []
 
     def scrape(self, task):
         if self.provider.get_type() == Provider.rentCanada:
@@ -75,7 +86,7 @@ class Scraper:
         # No map boundaries needed here apparently
         print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
-        self.results = results
+        results = Scrape(results)
         return results
 
     def scrape_rent_faster(self, task):
@@ -94,7 +105,7 @@ class Scraper:
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
-        self.results = results
+        results = Scrape(results)
         return results
 
     def scrape_rent_seeker(self, task):
@@ -114,7 +125,7 @@ class Scraper:
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
 
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
-        self.results = results
+        results = Scrape(results)
         return results
 
     def add_failure_to_logs(self, failure_details):

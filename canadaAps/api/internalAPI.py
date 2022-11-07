@@ -16,19 +16,29 @@ class InternalAPI:
         payload = {"provider": self.provider.type}
         print(task_queue_address + "/next_tasks_for_scraper")
         r = requests.get(task_queue_address + "/next_tasks_for_scraper", json=payload)
-        print(r.json(), r.status_code, self.provider.type)
+        print(r.status_code, self.provider.type, "19rm")
+        print(r.json(), "20rm")
         if r.status_code == 200:
             return r.json()
         else:
             raise NotImplementedError("No response from taskQueue")
 
-    def report_findings(self, apartments):
+    def report_findings_and_mark_complete(self, task, apartments):
         print(apartments, "26rm")
-        payload = {"provider": self.provider.type, "apartments": apartments}
-        r = requests.post(task_queue_address + "/report_findings", json=payload)
+        payload = {"provider": self.provider.type, "taskId": task.id, "apartments": apartments}
+        r = requests.post(task_queue_address + "/report_findings_and_mark_complete", json=payload)
         return r.status_code == 200
 
-    def mark_task_complete(self, task_id):
-        payload = {"provider": self.provider.type, "taskId": task_id}
-        r = requests.post(task_queue_address + "/mark_task_complete", json=payload)
+    # def mark_task_complete(self, task_id):
+    #     payload = {"provider": self.provider.type, "taskId": task_id}
+    #     r = requests.post(task_queue_address + "/mark_task_complete", json=payload)
+    #     return r.status_code == 200
+
+    def report_failure_for(self, task, scrapes):
+        payload = {
+            "provider": self.provider.type,
+            "task_id": task.id,
+            "issues": [{"reason": x.issue} for x in scrapes]
+        }
+        r = requests.post(task_queue_address + "/report_failure", json=payload)
         return r.status_code == 200
