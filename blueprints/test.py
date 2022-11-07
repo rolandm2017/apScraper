@@ -1,7 +1,7 @@
 from flask import Blueprint, request, current_app
 # from celery.task.control import inspect
 
-from ..scrapers.Task import Task
+from scrapers.Task import Task
 from .tasks import create_task  # fixme: start2
 # from ..scrapers.ProgramInit import celery
 

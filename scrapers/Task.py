@@ -1,13 +1,12 @@
-from ..api.internalAPI import InternalAPI
+from api.internalAPI import InternalAPI
 
 
 class Task:
-    def __init__(self, identifier, lat, long, viewport_width):
+    def __init__(self, identifier, lat, long, viewport_width="default"):
         self.identifier = identifier
         self.lat = lat
         self.long = long
         self.viewport_width = viewport_width
-        self.is_ready = True  # yagni
 
     def forward_task_to_scraper(self, scraper):
         scraper.accept_task(self)

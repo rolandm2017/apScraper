@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template, abort, request, current_app
 from time import sleep
 
-from ..scrapers.Scraper import Scraper
-from ..scrapers.Provider import Provider
+from scrapers.Scraper import Scraper
+from scrapers.Provider import Provider
+
+from api.internalAPI import InternalAPI
+from api.websitesAPI import WebsitesAPI
 
 activate_blueprint = Blueprint('activate_blueprint', __name__)
 
@@ -13,9 +16,14 @@ END_OF_LOOP = MAX_RETRIES - 1
 def main():
     print("activated")
     # print(current_app.config.get("provider"))
-    provider = request.args.get("provider")
+    provider = request.json["provider"]
+    print(provider, "21rm")
     provider = Provider(provider)
-    scraper = Scraper(provider)
+
+    websites_api = WebsitesAPI()
+    internal_api = InternalAPI(provider)
+    scraper = Scraper(provider, internal_api, websites_api)
+
     scraper.refresh_proxy()
     print(scraper.provider, scraper.provider.type)
     tasks = scraper.ask_for_tasks()

@@ -1,13 +1,17 @@
 # from dotenv import load_dotenv
 
-from .scrapers.Scraper import Scraper
-from .scrapers.Provider import Provider
+from scrapers.Scraper import Scraper
+from scrapers.Provider import Provider
+from api.websitesAPI import WebsitesAPI
+from api.internalAPI import InternalAPI
 
-from .scrapers.ProgramInit import create_app
+from scrapers.ProgramInit import create_app
 
 application = create_app()
+print("name!", __name__)
+#
 
-celery = application.celery
+# celery = application.celery
 
 #
 # if __name__ == '__main__':
@@ -20,7 +24,11 @@ celery = application.celery
 
 p = "rentCanada"
 provider = Provider(p)
-scraper = Scraper(provider)
+
+internal_api = InternalAPI(provider)
+websites_api = WebsitesAPI()
+
+scraper = Scraper(provider, internal_api, websites_api)
 
 # app = Flask(__name__)
 

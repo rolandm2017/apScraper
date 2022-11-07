@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 
-from ..api.proxyAPI import ProxyAPI
+from api.proxyAPI import ProxyAPI
 
 load_dotenv()
 
@@ -10,9 +10,8 @@ class ProxyTools:
     def __init__(self):
         pass
 
-
-
-    def get_proxy_ip(self, choice):
+    @staticmethod
+    def get_proxy_ip(choice):
         token = os.environ.get("apikey")
         r = ProxyAPI().get_proxy_connection_info(token)
         selected_proxy_ip = r.json()["results"][choice]["proxy_address"]
@@ -20,7 +19,8 @@ class ProxyTools:
         print(selected_proxy_ip)
         return selected_proxy_ip, selected_proxy_port
 
-    def create_proxy_dict(self, ip, port):
+    @staticmethod
+    def create_proxy_dict(ip, port):
         username = os.environ.get("username")
         password = os.environ.get("password")
         http_proxy_string = f"http://{username}:{password}@{ip}:{port}"
@@ -29,11 +29,16 @@ class ProxyTools:
         proxy_dict = {"http": http_proxy_string, "https": http_proxy_string}
         return proxy_dict
 
-    def confirm_public_ip(self, proxy_dict, desired_ip):
-        print(proxy_dict, desired_ip, "5rm")
+    @staticmethod
+    def confirm_public_ip_is_proxy_ip(proxy_dict, desired_ip_from_proxy):
+        print(proxy_dict, desired_ip_from_proxy, "5rm")
+        # test
+        # token = os.environ.get("apikey")
         r, r2 = ProxyAPI().get_public_ip(proxy_dict)
-        print(desired_ip, r.text, r2.text, "6rm")
-        ip_is_correct = r.text == desired_ip and r2.text == desired_ip
+        print(desired_ip_from_proxy, "35rm")
+        print(r.text, "35rm")
+        print(r2.text, "35rm")
+        ip_is_correct = r.text == desired_ip_from_proxy and r2.text == desired_ip_from_proxy
         return ip_is_correct
 
 

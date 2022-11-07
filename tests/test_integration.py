@@ -1,17 +1,21 @@
 from ..scrapers.Scraper import Scraper
+import os
+import tempfile
+
+import pytest
+
+# from flaskr import flaskr
 
 
-# ### Arrange
-# Pretend oneShot route
-def one_shot():
-    scrape_details = {"lat": 45, "long": -73, "provider": "rentCanada"}
-    scraper = Scraper("rentCanada")
-    scraper.refresh_proxy()
-    results = scraper.scrape(scrape_details)  # Todo: modify scraper to take mocks for api
-    return results
-
-
-# ### Act
-# def test_one_shot():
-#     assert one_shot() == 5
-
+# @pytest.fixture
+# def client():
+#     db_fd, flaskr.app.config['DATABASE'] = tempfile.mkstemp()
+#     flaskr.app.config['TESTING'] = True
+#
+#     with flaskr.app.test_client() as client:
+#         with flaskr.app.app_context():
+#             flaskr.init_db()
+#         yield client
+#
+#     os.close(db_fd)
+#     os.unlink(flaskr.app.config['DATABASE'])

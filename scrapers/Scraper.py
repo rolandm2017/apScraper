@@ -1,11 +1,9 @@
-from ..util.proxyTools import ProxyTools
+from util.proxyTools import ProxyTools
 from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
-# from ..api.websitesAPI import WebsitesAPI
-# from ..api.internalAPI import InternalAPI
 
-from ..scrapers.Task import Task
+from scrapers.Task import Task
 
 
 class Scraper:
@@ -14,7 +12,7 @@ class Scraper:
         self.proxy_dict = None
         self.results = None
         self.queue = None
-        self.internalAPI = internal_api
+        self.internal_api = internal_api
         self.web_api = web_api
 
     def refresh_proxy(self):
@@ -23,7 +21,7 @@ class Scraper:
         # # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
         # proxy = {"http": http_proxy_string, "https": http_proxy_string}
         proxy_dict = ProxyTools().create_proxy_dict(proxy_ip, proxy_port)
-        public_ip_is_correct = ProxyTools().confirm_public_ip(proxy_dict, proxy_ip)
+        public_ip_is_correct = ProxyTools().confirm_public_ip_is_proxy_ip(proxy_dict, proxy_ip)
         if public_ip_is_correct:
             self.proxy_dict = proxy_dict
         else:
@@ -32,7 +30,7 @@ class Scraper:
             raise NotImplementedError("The expected proxy IP was different from public IP")
 
     def ask_for_tasks(self):
-        task_details = self.internalAPI(self.provider).ask_for_tasks()
+        task_details = self.internal_api.ask_for_tasks()
         tasks = []
         for d in task_details:
             task = Task(d["id"], d["lat"], d["long"], d["zoomWidth"])
@@ -46,7 +44,7 @@ class Scraper:
         return self.results
     
     def report_apartments(self, results):
-        report_was_successful = self.internalAPI().report_findings(results)
+        report_was_successful = self.internal_api.report_findings(results)
         return report_was_successful
 
     def scrape(self, task):

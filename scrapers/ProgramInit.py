@@ -1,13 +1,13 @@
 import os
 from flask import Flask
 from celery import Celery
-from ..config import Config, DevelopmentConfig
+from config import Config, DevelopmentConfig
 
-from ..blueprints.activate import activate_blueprint
-from ..blueprints.publicIp import show_public_ip_blueprint
-from ..blueprints.test import test_blueprint
-from ..blueprints.oneShot import one_shot_scrape_blueprint
-from ..blueprints.healthCheck import health_check_blueprint
+from blueprints.activate import activate_blueprint
+from blueprints.publicIp import show_public_ip_blueprint
+from blueprints.test import test_blueprint
+from blueprints.oneShot import one_shot_scrape_blueprint
+from blueprints.healthCheck import health_check_blueprint
 
 
 # # todo: make the same celery usable over multiple files
@@ -58,8 +58,8 @@ def register_blueprints(app):
 
 
 def register_error_handlers(app):
-  pass
+    pass
 
 
 def configure_logging(app):
-  pass
+    pass
