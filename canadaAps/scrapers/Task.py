@@ -2,11 +2,11 @@
 #
 
 class Task:
-    def __init__(self, identifier, lat, long, internal_api, viewport_width="default",):
+    def __init__(self, identifier, lat, long, viewport_width="default",):
         self.identifier = identifier
         self.lat = lat
         self.long = long
-        self.internal_api = internal_api
+        # self.internal_api = internal_api
         self.viewport_width = viewport_width
 
     def forward_task_to_scraper(self, scraper):

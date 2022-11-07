@@ -30,4 +30,4 @@ def scrape():
         task = Task(scrape_details["id"], scrape_details["lat"], scrape_details["long"])
 
     results = scraper.scrape(task)
-    return results
+    return {"results": results.results}

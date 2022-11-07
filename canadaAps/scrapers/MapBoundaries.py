@@ -40,7 +40,8 @@ class MapBoundaries:
             return f"l=11%2C45.5017%2C-73.5673&" \
                    f"area=${lat1}%2C${long1}%2C${lat2}%2C${long2}&exclude="
         elif self.provider.get_type() == Provider.rentSeeker:
-            return '{"params":"query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&' \
-                   'insideBoundingBox=%5B%5B${}%2C${}%2C${}%2C${}%5D"}'.format(lat1, long1, lat2, long2)
+            params = "query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&' \
+                   'insideBoundingBox=%5B%5B${}%2C${}%2C${}%2C${}%5D".format(lat1, long1, lat2, long2)
+            return {"params": params}
         else:
             raise ValueError("No provider given in MapBoundaries")
