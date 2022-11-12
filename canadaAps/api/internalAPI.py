@@ -19,13 +19,13 @@ class InternalAPI:
         print(r.status_code, self.provider.type, "19rm")
         print(r.json(), "20rm")
         if r.status_code == 200:
-            return r.json()
+            return r.json()["tasks"]
         else:
             raise NotImplementedError("No response from taskQueue")
 
     def report_findings_and_mark_complete(self, task, apartments):
         print(apartments, "26rm")
-        payload = {"provider": self.provider.type, "taskId": task.id, "apartments": apartments}
+        payload = {"provider": self.provider.type, "taskId": task.identifier, "apartments": apartments}
         r = requests.post(task_queue_address + "/report_findings_and_mark_complete", json=payload)
         return r.status_code == 200
 
@@ -37,7 +37,7 @@ class InternalAPI:
     def report_failure_for(self, task, scrapes):
         payload = {
             "provider": self.provider.type,
-            "task_id": task.id,
+            "task_id": task.identifier,
             "issues": [{"reason": x.issue} for x in scrapes]
         }
         r = requests.post(task_queue_address + "/report_failure", json=payload)

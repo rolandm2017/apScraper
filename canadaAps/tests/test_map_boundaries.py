@@ -60,5 +60,5 @@ def test_rent_seeker():
     assert "west" in bounds
     assert "south" in bounds
     assert len(start) == 231
-    assert len(raw_json_body["params"]) == 207  # fixme: what is this REALLY testing?
+    assert len(raw_json_body["params"]) == 177  # fixme: what is this REALLY testing?
 

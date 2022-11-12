@@ -16,26 +16,34 @@ class Scraper:
         self.internal_api = internal_api
         self.web_api = web_api
         self.issue_logs = []
+        self.proxy_tools = ProxyTools()
 
     def refresh_proxy(self):
-        proxy_ip, proxy_port = ProxyTools().get_proxy_ip(0)
-        # http_proxy_string = "http://" + str(proxy_ip) + ":" + str(proxy_port)
-        # # https_proxy_string = "https://" + str(proxy_ip) + ":" + str(proxy_port)
-        # proxy = {"http": http_proxy_string, "https": http_proxy_string}
+        if self.proxy_dict:
+            return  # no need to store it multiple times. also no need to request an ip from proxy service repeatedly
+        proxy_ip, proxy_port = self.proxy_tools.get_proxy_ip(0)
         proxy_dict = ProxyTools().create_proxy_dict(proxy_ip, proxy_port)
-        public_ip_is_correct = ProxyTools().confirm_public_ip_is_proxy_ip(proxy_dict, proxy_ip)
-        if public_ip_is_correct:
-            self.proxy_dict = proxy_dict
-        else:
-            print(public_ip_is_correct, proxy_ip)
-            # TODO: if proxy ip isn't set, retry setting it <= 5x
-            raise NotImplementedError("The expected proxy IP was different from public IP")
+        # ###
+        # ##
+        # Disabled because the "confirm public ip is proxy ip" api was 429ing me
+        # public_ip_is_correct = self.proxy_tools.confirm_public_ip_is_proxy_ip(proxy_dict, proxy_ip)
+        # ##
+        # ###
+        self.proxy_dict = proxy_dict
+        # if public_ip_is_correct:
+        #     self.proxy_dict = proxy_dict
+        # else:
+        #     print(proxy_dict, public_ip_is_correct, proxy_ip)
+        #     # TODO: if proxy ip isn't set, retry setting it <= 5x
+        #     raise NotImplementedError("The expected proxy IP was different from public IP")
 
     def ask_for_tasks(self):
         task_details = self.internal_api.ask_for_tasks()
         tasks = []
         for d in task_details:
-            task = Task(d["id"], d["lat"], d["long"], d["zoomWidth"])
+            print(task_details, "42rm")
+            print(d, "42rm")
+            task = Task(d["taskId"], d["lat"], d["long"], d["zoomWidth"])
             tasks.append(task)
         return tasks
 
@@ -86,7 +94,7 @@ class Scraper:
         # No map boundaries needed here apparently
         print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
-        results = Scrape(results)
+        results = Scrape(results, True)
         return results
 
     def scrape_rent_faster(self, task):
@@ -105,7 +113,7 @@ class Scraper:
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
-        results = Scrape(results)
+        results = Scrape(results, True)
         return results
 
     def scrape_rent_seeker(self, task):
@@ -125,14 +133,5 @@ class Scraper:
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
 
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
-        results = Scrape(results)
+        results = Scrape(results, True)
         return results
-
-    def add_failure_to_logs(self, failure_details):
-        # todo: will do this later
-        pass
-
-    def report_failure_for(self, task):
-        # todo: will do this later
-        pass
-

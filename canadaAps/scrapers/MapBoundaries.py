@@ -40,8 +40,8 @@ class MapBoundaries:
             return f"l=11%2C45.5017%2C-73.5673&" \
                    f"area=${lat1}%2C${long1}%2C${lat2}%2C${long2}&exclude="
         elif self.provider.get_type() == Provider.rentSeeker:
-            params = "query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&' \
-                   'insideBoundingBox=%5B%5B${}%2C${}%2C${}%2C${}%5D".format(lat1, long1, lat2, long2)
+            # note: Is there a problem here? See Postman "Ap Scraping Via Postman" / "RentSeeker.ca" / ...
+            params = "query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&insideBoundingBox=[[" + str(lat1) + "," + str(long1) + "," + str(lat2) + "," + str(long2) + "]]"
             return {"params": params}
         else:
             raise ValueError("No provider given in MapBoundaries")

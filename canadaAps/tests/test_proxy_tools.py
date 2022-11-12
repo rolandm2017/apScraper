@@ -27,7 +27,7 @@ def is_some_port(test_port):
         return True
     return False
 
-@pytest.mark.skip(reason="uses external api - dont wanna run it every time")
+# @pytest.mark.skip(reason="uses external api - dont wanna run it every time")
 def test_get_proxy_ip():
     ip, port = arrange_get_proxy_ip()
     assert is_some_ip(ip)
@@ -35,7 +35,7 @@ def test_get_proxy_ip():
     return ip, port
 
 
-@pytest.mark.skip(reason="uses external api - dont wanna run it every time")
+# @pytest.mark.skip(reason="uses external api - dont wanna run it every time")
 def get_current_public_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -44,7 +44,7 @@ def get_current_public_ip():
     return current_ip
 
 
-@pytest.mark.skip(reason="uses external api - dont wanna run it every time")
+# @pytest.mark.skip(reason="uses external api - dont wanna run it every time")
 def test_confirm_public_ip():
     ip, port = arrange_get_proxy_ip()
     proxy_dict = arrange_create_proxy_dict(ip, port)

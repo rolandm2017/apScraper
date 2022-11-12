@@ -1,3 +1,5 @@
+import json
+
 # from canadaAps.api.internalAPI import InternalAPI
 #
 
@@ -11,6 +13,10 @@ class Task:
 
     def forward_task_to_scraper(self, scraper):
         scraper.accept_task(self)
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
 
     # def report_findings(self, apartments):
     #     report_was_successful = InternalAPI().report_findings(apartments)
