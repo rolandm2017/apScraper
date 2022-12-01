@@ -20,8 +20,8 @@ lat1 = 45.553102184226546
 lat2 = 45.44661960947297
 
 print("== RentCanada ==")
-print(calculate(lat1, lat2) / 2)
-print(calculate(long1, long2) / 2)
+# print(calculate(lat1, lat2) / 2)
+# print(calculate(long1, long2) / 2)
 
 # RentSeeker values for box perimeter
 # [[45.45344020494669,-73.65633240761402,45.6491408097154,-73.46235505165698]]
@@ -33,8 +33,8 @@ long1 = -73.65633240761402
 long2 = -73.46235505165698
 
 print("== RentSeeker ==")
-print(calculate(lat1, lat2) / 2)
-print(calculate(long1, long2) / 2)
+# print(calculate(lat1, lat2) / 2)
+# print(calculate(long1, long2) / 2)
 
 # RentFaster values for box perimeter
 
@@ -58,10 +58,10 @@ long3 = -73.48524586181642
 long4 = -73.58738438110353
 
 print("== RentFaster ==")
-print(calculate(lat1, lat2))
-print(calculate(long1, long2))
-print(calculate(lat3, lat4))
-print(calculate(long3, long4))
+# print(calculate(lat1, lat2))
+# print(calculate(long1, long2))
+# print(calculate(lat3, lat4))
+# print(calculate(long3, long4))
 
 # == RentCanada ==
 # 0.053241287376788904

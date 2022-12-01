@@ -12,9 +12,9 @@ class ProxyAPI:
 
     @staticmethod
     def get_public_ip(proxy_dict):
-        print(proxy_dict)
+        print(proxy_dict, "15rm")
         r = requests.get('http://api.ipify.org', proxies=proxy_dict)  # OK
         r2 = requests.get('http://api.my-ip.io/ip', proxies=proxy_dict)  # OK
-        print(r)
-        print(r2)
+        print(r, "18rm")
+        print(r2, "19rm")
         return r, r2

@@ -14,7 +14,6 @@ def custom_query_string(lat, long):
     new_lats = bump_lat(north_lat, south_lat, lat)
     new_longs = bump_lat(north_long, south_long, long)
 
-    print(new_longs, new_lats)
     # original string values
     # f"%22north%22:%7B%22lat%22:45.517364677766764,%22lng%22:-73.54265710766485%7D," \
     # f"%22south%22:%7B%22lat%22:45.49077609093645,%22lng%22:-73.57162496502569%7D%7D," \

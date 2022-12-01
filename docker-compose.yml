@@ -2,7 +2,7 @@ version: "3.8"
 services:
   canada:
     build:
-      context: canadaAps/scrapers/rentCanada
+      context: canadaAps/scraper/rentCanada
       dockerfile: Dockerfile
 #    image: "canada" <== what should this be?
     ports:
@@ -17,14 +17,14 @@ services:
       - redis
   faster:
     build:
-      context: canadaAps/scrapers/rentFaster
+      context: canadaAps/scraper/rentFaster
       dockerfile: Dockerfile
 #    image: "faster"
     ports:
       - "8083:8083"
   seeker:
     build:
-      context: canadaAps/scrapers/rentSeeker
+      context: canadaAps/scraper/rentSeeker
       dockerfile: Dockerfile
 #    image: "seeker"
     ports:

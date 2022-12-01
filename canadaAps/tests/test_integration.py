@@ -3,7 +3,7 @@ import pytest
 
 from ..config import Config
 
-from canadaAps.scrapers.ProgramInit import create_app
+from canadaAps.scraper.ProgramInit import create_app
 
 
 def client(cel_instance_to_satisfy_argument):

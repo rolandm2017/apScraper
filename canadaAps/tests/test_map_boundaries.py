@@ -1,6 +1,6 @@
-from ..scrapers.MapBoundaries import MapBoundaries
-from ..scrapers.QueryString import QueryString
-from ..scrapers.Provider import Provider
+from ..scraper.MapBoundaries import MapBoundaries
+from ..scraper.QueryString import QueryString
+from ..scraper.Provider import Provider
 
 rent_canada_provider = Provider("rentCanada")
 rent_faster_provider = Provider("rentFaster")

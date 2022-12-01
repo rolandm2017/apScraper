@@ -4,13 +4,13 @@ from celery import Celery
 # from . import Config, DevelopmentConfig
 from .config import Config
 
-from canadaAps.scrapers.Scraper import Scraper
-from canadaAps.scrapers.Provider import Provider
+from canadaAps.scraper.Scraper import Scraper
+from canadaAps.scraper.Provider import Provider
 from canadaAps.api.websitesAPI import WebsitesAPI
 from canadaAps.api.internalAPI import InternalAPI
-# from . import scrapers.scrapers.Scraper
+# from . import scraper.scraper.Scraper
 
-from canadaAps.scrapers.ProgramInit import create_app
+from canadaAps.scraper.ProgramInit import create_app
 
 celery = Celery("rentCanada", broker=Config.CELERY_BROKER_URL, result_backend=Config.RESULT_BACKEND)
 

@@ -4,7 +4,7 @@ from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
 from .Scrape import Scrape
 
-from canadaAps.scrapers.Task import Task
+from canadaAps.scraper.Task import Task
 
 
 class Scraper:
@@ -74,7 +74,7 @@ class Scraper:
         elif self.provider.get_type() == Provider.rentSeeker:
             return self.scrape_rent_seeker(task)
         else:
-            print(self.provider)
+            print(self.provider, "77rm")
             raise ValueError("invalid scraper type")
 
     def scrape_rent_canada(self, task):
@@ -92,7 +92,7 @@ class Scraper:
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         # No map boundaries needed here apparently
-        print(lat, long, bounds, start, self.proxy_dict, "78rm")
+        # print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
         results = Scrape(results, True)
         return results

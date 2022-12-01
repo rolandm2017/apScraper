@@ -10,4 +10,4 @@ headers = {
 r = s.get("https://www.apartments.com/montreal-qc/", headers=headers)
 print(r.text)
 
-# TODO: make a successful query like in scrapers.py
+# TODO: make a successful query like in scraper.py

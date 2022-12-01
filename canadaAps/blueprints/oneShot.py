@@ -1,8 +1,8 @@
 from flask import Blueprint, request
 
-from canadaAps.scrapers.Scraper import Scraper
-from canadaAps.scrapers.Task import Task
-from canadaAps.scrapers.Provider import Provider
+from canadaAps.scraper.Scraper import Scraper
+from canadaAps.scraper.Task import Task
+from canadaAps.scraper.Provider import Provider
 
 from canadaAps.api.internalAPI import InternalAPI
 from canadaAps.api.websitesAPI import WebsitesAPI

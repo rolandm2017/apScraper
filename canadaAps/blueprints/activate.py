@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
-from canadaAps.scrapers.Scraper import Scraper
-from canadaAps.scrapers.Provider import Provider
+from canadaAps.scraper.Scraper import Scraper
+from canadaAps.scraper.Provider import Provider
 
 from canadaAps.api.internalAPI import InternalAPI
 from canadaAps.api.websitesAPI import WebsitesAPI
@@ -28,11 +28,11 @@ def activate():
     # scraper.refresh_proxy()
     # print(scraper.provider, scraper.provider.type)
     tasks = scraper.ask_for_tasks()
-    print("TASKS: " + str(len(tasks)))
+    print("TASKS: " + str(len(tasks)), "31rm")
     added_tasks = []
     for i in range(0, len(tasks)):
         async_request = scrape_stuff.apply_async(args=[provider, tasks[i].to_json()])
-        added_tasks.append(async_request.id)
+        added_tasks.append([async_request.id, tasks[i].identifier])
     return added_tasks
         # for index in range(0, MAX_RETRIES):
         #     scrape = scraper.scrape(tasks[i])

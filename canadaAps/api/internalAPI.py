@@ -24,7 +24,6 @@ class InternalAPI:
             raise NotImplementedError("No response from taskQueue")
 
     def report_findings_and_mark_complete(self, task, apartments):
-        print(apartments, "26rm")
         payload = {"provider": self.provider.type, "taskId": task.identifier, "apartments": apartments}
         r = requests.post(task_queue_address + "/report_findings_and_mark_complete", json=payload)
         return r.status_code == 200

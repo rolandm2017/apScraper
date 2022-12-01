@@ -1,8 +1,8 @@
 # from dotenv import load_dotenv
 from flask import Flask
 
-from canadaAps.scrapers.Scraper import Scraper
-from canadaAps.scrapers import Provider
+from canadaAps.scraper.Scraper import Scraper
+from canadaAps.scraper import Provider
 from canadaAps.blueprints.publicIp import show_public_ip_blueprint
 from canadaAps.blueprints.test import test_blueprint
 from canadaAps.blueprints.oneShot import one_shot_scrape_blueprint

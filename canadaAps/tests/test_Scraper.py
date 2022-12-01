@@ -5,11 +5,11 @@ from unittest.mock import Mock, MagicMock
 from ..api.websitesAPI import WebsitesAPI
 from ..api.internalAPI import InternalAPI
 
-from ..scrapers.Provider import Provider
-from ..scrapers.Scraper import Scraper
-from ..scrapers.Task import Task
+from ..scraper.Provider import Provider
+from ..scraper.Scraper import Scraper
+from ..scraper.Task import Task
 
-from .. import scrapers
+from .. import scraper
 
 task = Task(10, 50, 45, 5)
 

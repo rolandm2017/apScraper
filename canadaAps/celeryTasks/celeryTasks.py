@@ -2,13 +2,13 @@ from time import sleep
 from celery import current_app
 import json
 
-from canadaAps.scrapers.Scraper import Scraper
-from canadaAps.scrapers.Provider import Provider
+from canadaAps.scraper.Scraper import Scraper
+from canadaAps.scraper.Provider import Provider
 
 from canadaAps.api.internalAPI import InternalAPI
 from canadaAps.api.websitesAPI import WebsitesAPI
 
-from canadaAps.scrapers.Task import Task
+from canadaAps.scraper.Task import Task
 
 
 
@@ -38,14 +38,10 @@ MAX_RETRIES = 5
 END_OF_LOOP = MAX_RETRIES - 1
 
 
-
 @current_app.task(name="scrape_stuff")
 def scrape_stuff(provider, task):
     task_json = json.loads(task)
     task = Task(task_json["identifier"], task_json["lat"], task_json["long"], task_json["viewport_width"])
-    # print(remade_task)
-    # return remade_task
-    # return 3
     provider = Provider(provider)
 
     # # fixme: isnt remaking these objects over and over pretty costly?

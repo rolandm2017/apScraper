@@ -1,8 +1,8 @@
 from flask import Blueprint, request, render_template, abort
 
-from ..scrapers.Scraper import Scraper
-from ..scrapers.Task import Task
-from ..scrapers.Provider import Provider
+from ..scraper.Scraper import Scraper
+from ..scraper.Task import Task
+from ..scraper.Provider import Provider
 
 from ..api.internalAPI import InternalAPI
 from ..api.websitesAPI import WebsitesAPI
