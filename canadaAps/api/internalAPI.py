@@ -28,7 +28,6 @@ class InternalAPI:
         r = requests.post(task_queue_address + "/report-findings-and-mark-complete", json=payload)
         return r.status_code == 200
 
-
     def report_failure_for(self, task, scrapes):
         payload = {
             "provider": self.provider.type,

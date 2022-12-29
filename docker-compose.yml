@@ -1,40 +1,23 @@
-version: "3.8"
+version: "3.0"
 services:
   canada:
     build:
-      context: canadaAps/scraper/rentCanada
+      context: .
       dockerfile: Dockerfile
-#    image: "canada" <== what should this be?
     ports:
       - 8082:8082
-    command: python rentCanada.py
     environment:
       - FLASK_DEBUG=1
       - APP_SETTINGS=project.server.config.DevelopmentConfig
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379
+      - CELERY_RESULT_BACKEND=redis://redis:6379
     depends_on:
       - redis
-  faster:
-    build:
-      context: canadaAps/scraper/rentFaster
-      dockerfile: Dockerfile
-#    image: "faster"
-    ports:
-      - "8083:8083"
-  seeker:
-    build:
-      context: canadaAps/scraper/rentSeeker
-      dockerfile: Dockerfile
-#    image: "seeker"
-    ports:
-      - "8084:8084"
-
-  worker:
+    command: python ./canadaAps/rentCanada.py
+  celery:
     build: .
-    command: celery --app project.server.tasks.celery worker --loglevel=info
     volumes:
-      - .:/usr/src/app
+      - .:/code
     environment:
       - FLASK_DEBUG=1
       - APP_SETTINGS=project.server.config.DevelopmentConfig
@@ -43,8 +26,6 @@ services:
     depends_on:
       - canada
       - redis
-      - faster
-      - seeker
-
+    command: celery --app canadaAps.rentCanada worker --loglevel=info
   redis:
     image: redis:6-alpine
