@@ -41,8 +41,6 @@ class Scraper:
         task_details = self.internal_api.ask_for_tasks()
         tasks = []
         for d in task_details:
-            print(task_details, "42rm")
-            print(d, "42rm")
             task = Task(d["taskId"], d["lat"], d["long"], d["zoomWidth"])
             tasks.append(task)
         return tasks

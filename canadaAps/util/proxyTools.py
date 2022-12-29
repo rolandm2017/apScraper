@@ -14,24 +14,30 @@ class ProxyTools:
     @staticmethod
     def get_proxy_ip(choice):
         token = os.environ.get("apikey")
-        r = ProxyAPI().get_proxy_connection_info(token)
-        result = r.json()
-        try:
-            if result["details"] == 'Request was throttled. Expected available in 45 seconds.':
-                sleep(60)
-                r = ProxyAPI().get_proxy_connection_info(token)
-                result = r.json()
-        except KeyError as e:
-            print("No throttling yet")
-        try:
-            selected_proxy_ip = result["results"][choice]["proxy_address"]
-            selected_proxy_port = result["results"][choice]["port"]
-        except KeyError as e:
-            print(result)  # look whats on it, maybe something useful
-            # File "/home/rlm/Code/canadaAps/canadaAps/util/proxyTools.py", line 26, in get_proxy_ip
-            # selected_proxy_ip = result["results"][choice]["proxy_address"]
-            # KeyError: 'results'
-            print("This again")
+
+        selected_proxy_ip = None
+        selected_proxy_port = None
+        # todo: if throttled, rerun function with "choice + 1"
+        while selected_proxy_ip is None or selected_proxy_port is None:
+            r = ProxyAPI().get_proxy_connection_info(token)
+            result = r.json()
+            try:
+                if result["detail"] == 'Request was throttled. Expected available in 45 seconds.':
+                    sleep(60)
+                    r = ProxyAPI().get_proxy_connection_info(token)
+                    result = r.json()
+            except KeyError as e:
+                print("No throttling yet")
+            try:
+                selected_proxy_ip = result["results"][choice]["proxy_address"]
+                selected_proxy_port = result["results"][choice]["port"]
+            except KeyError as e:
+                print(e)
+                print(result)  # look whats on it, maybe something useful
+                # File "/home/rlm/Code/canadaAps/canadaAps/util/proxyTools.py", line 26, in get_proxy_ip
+                # selected_proxy_ip = result["results"][choice]["proxy_address"]
+                # KeyError: 'results'
+                print("This again")
         return selected_proxy_ip, selected_proxy_port
 
     @staticmethod
