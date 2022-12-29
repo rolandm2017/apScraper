@@ -14,8 +14,8 @@ class InternalAPI:
 
     def ask_for_tasks(self):
         payload = {"provider": self.provider.type}
-        print(task_queue_address + "/next_tasks_for_scraper")
-        r = requests.get(task_queue_address + "/next_tasks_for_scraper", json=payload)
+        print(task_queue_address + "/next-tasks-for-scraper")
+        r = requests.get(task_queue_address + "/next-tasks-for-scraper", json=payload)
         print(r.status_code, self.provider.type, "19rm")
         print(r.json(), "20rm")
         if r.status_code == 200:
@@ -25,7 +25,7 @@ class InternalAPI:
 
     def report_findings_and_mark_complete(self, task, apartments):
         payload = {"provider": self.provider.type, "taskId": task.identifier, "apartments": apartments}
-        r = requests.post(task_queue_address + "/report_findings_and_mark_complete", json=payload)
+        r = requests.post(task_queue_address + "/report-findings-and-mark-complete", json=payload)
         return r.status_code == 200
 
     # def mark_task_complete(self, task_id):
@@ -39,5 +39,5 @@ class InternalAPI:
             "task_id": task.identifier,
             "issues": [{"reason": x.issue} for x in scrapes]
         }
-        r = requests.post(task_queue_address + "/report_failure", json=payload)
+        r = requests.post(task_queue_address + "/report-failure", json=payload)
         return r.status_code == 200

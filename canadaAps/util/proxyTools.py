@@ -23,8 +23,15 @@ class ProxyTools:
                 result = r.json()
         except KeyError as e:
             print("No throttling yet")
-        selected_proxy_ip = result["results"][choice]["proxy_address"]
-        selected_proxy_port = result["results"][choice]["port"]
+        try:
+            selected_proxy_ip = result["results"][choice]["proxy_address"]
+            selected_proxy_port = result["results"][choice]["port"]
+        except KeyError as e:
+            print(result)  # look whats on it, maybe something useful
+            # File "/home/rlm/Code/canadaAps/canadaAps/util/proxyTools.py", line 26, in get_proxy_ip
+            # selected_proxy_ip = result["results"][choice]["proxy_address"]
+            # KeyError: 'results'
+            print("This again")
         return selected_proxy_ip, selected_proxy_port
 
     @staticmethod

@@ -8,3 +8,4 @@ RUN pip install requests
 EXPOSE 8082
 COPY . .
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=8082"]
+CMD [ "celery", "-A", "canadaAps.rentCanada", "worker", "--loglevel=INFO"]
