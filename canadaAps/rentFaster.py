@@ -1,28 +1,32 @@
-# from dotenv import load_dotenv
-from flask import Flask
+from celery import Celery
+
+from .config import Config
 
 from canadaAps.scraper.Scraper import Scraper
-from canadaAps.scraper import Provider
-from canadaAps.blueprints.publicIp import show_public_ip_blueprint
-from canadaAps.blueprints.test import test_blueprint
-from canadaAps.blueprints.oneShot import one_shot_scrape_blueprint
+from canadaAps.scraper.Provider import Provider
+from canadaAps.api.websitesAPI import WebsitesAPI
+from canadaAps.api.internalAPI import InternalAPI
+# from . import scraper.scraper.Scraper
 
+from canadaAps.scraper.ProgramInit import create_app
 
-p = "rentFaster"
+type = "rentFaster"
+
+celery = Celery(type, broker=Config.CELERY_BROKER_URL, result_backend=Config.RESULT_BACKEND)
+
+application = create_app(celery)
+print("name", __name__)
+
+p = type
 provider = Provider(p)
-scraper = Scraper(provider)
 
+internal_api = InternalAPI(provider)
+websites_api = WebsitesAPI()
 
-
-app = Flask(__name__)
-
-app.register_blueprint(show_public_ip_blueprint)
-app.register_blueprint(test_blueprint)
-app.register_blueprint(one_shot_scrape_blueprint)
-
+scraper = Scraper(provider, internal_api, websites_api)
 
 if __name__ == '__main__':
-    app.run()
+    application.run()
 
 
 # flask run -h localhost -p 5000
