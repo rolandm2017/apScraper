@@ -11,7 +11,6 @@ from ..celeryTasks.celeryTasks import scrape_stuff
 activate_blueprint = Blueprint('activate_blueprint', __name__)
 
 
-
 @activate_blueprint.route("/activate", methods=["POST"])
 def activate():
     print("activated", request.args.to_dict(), request.json)

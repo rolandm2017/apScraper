@@ -6,12 +6,7 @@ from canadaAps.scraper.Task import Task
 
 # from ..scraper.ProgramInit import celery
 
-# ## dont do this
-# from rentCanada import application
-# ##
-
 test_blueprint = Blueprint('test_blueprint', __name__)
-
 
 
 @test_blueprint.route("/test")
@@ -19,8 +14,6 @@ def test():
     scrape_details = request.json
     # task = Task(scrape_details["lat"], scrape_details["long"], scrape_details["zoomWidth"], queue)
     task = Task(scrape_details["lat"], scrape_details["long"], scrape_details["zoomWidth"])
-    # todo: import the Scraper singleton and use it here
-    # todo: make a Scraper singleton (possible?) perhaps just put it in 1 specific loc it'll always be in?
     scraper = []  # fixme: temp
     scraper.refresh_proxy()
     task.forward_task_to_scraper(scraper)

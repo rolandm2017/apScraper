@@ -47,9 +47,16 @@ class WebsitesAPI:
         headers = {
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
         }
-        print(start, "51rm")
-        print(map_boundary_info, "52rm")
         r = s.post(start, headers=headers, data=dumps(map_boundary_info))  # its POST in this one
-        print(r.json(), '53rm')
         results = r.json()
         return results
+
+    @staticmethod
+    def get_missing_url(missing_url_id, proxy):
+        s = requests.Session()
+        s.proxies.update(proxy)
+        response = s.get("https://www.rentcanada.com/api/listing/" + missing_url_id)
+        data = response.json()
+        url = data["listing"]["url"]
+        print(url)
+        return url

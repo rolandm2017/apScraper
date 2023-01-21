@@ -133,3 +133,7 @@ class Scraper:
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
         results = Scrape(results, True)
         return results
+
+    def get_missing_url_for_id(self, missing_url_id):
+        missing_url = self.web_api.get_missing_url(missing_url_id, self.proxy_dict)
+        return missing_url

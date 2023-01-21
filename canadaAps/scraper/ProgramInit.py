@@ -7,6 +7,7 @@ from canadaAps.blueprints.publicIp import show_public_ip_blueprint
 from canadaAps.blueprints.test import test_blueprint
 from canadaAps.blueprints.oneShot import one_shot_scrape_blueprint
 from canadaAps.blueprints.healthCheck import health_check_blueprint
+from canadaAps.blueprints.fetchURL import fetch_url_blueprint
 
 
 # # todo: make the same celery usable over multiple files
@@ -47,18 +48,13 @@ def create_app(celery):
     return app
 
 
-# def make_celery():
-#     celery = current_app
-#     celery.config_from_object(Config, namespace="CELERY")
-#
-#     return celery
-
 def register_blueprints(app):
     app.register_blueprint(activate_blueprint)
     app.register_blueprint(show_public_ip_blueprint)
     app.register_blueprint(test_blueprint)
     app.register_blueprint(one_shot_scrape_blueprint)
     app.register_blueprint(health_check_blueprint)
+    app.register_blueprint(fetch_url_blueprint)
 
     # app.register_blueprint(auth_blueprint, url_prefix='/users')
 

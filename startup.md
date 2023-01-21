@@ -13,4 +13,4 @@
     
    (b) from project root, run 
 
-5. "celery -A rentCanada canadaAps.canadaAps --loglevel=INFO" 
+5. "celery -A canadaAps.rentCanada worker --loglevel=INFO"
