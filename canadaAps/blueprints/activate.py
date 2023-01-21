@@ -15,18 +15,12 @@ activate_blueprint = Blueprint('activate_blueprint', __name__)
 @activate_blueprint.route("/activate", methods=["POST"])
 def activate():
     print("activated", request.args.to_dict(), request.json)
-    # print(current_app.config.get("provider"))
     provider = request.json["provider"]
-    # provider = request.args.to_dict()["provider"]
     print(provider, "21rm")
     provider_object = Provider(provider)
-    #
     websites_api = WebsitesAPI()
     internal_api = InternalAPI(provider_object)
     scraper = Scraper(provider_object, internal_api, websites_api)
-    #
-    # scraper.refresh_proxy()
-    # print(scraper.provider, scraper.provider.type)
     tasks = scraper.ask_for_tasks()
     print("TASKS: " + str(len(tasks)), "31rm")
     added_tasks = []

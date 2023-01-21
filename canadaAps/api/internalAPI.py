@@ -16,8 +16,7 @@ class InternalAPI:
         payload = {"provider": self.provider.type}
         print(task_queue_address + "/next-tasks-for-scraper")
         r = requests.get(task_queue_address + "/next-tasks-for-scraper", json=payload)
-        print(r.status_code, self.provider.type, "19rm")
-        print(r.json(), "20rm")
+        print("Asking for tasks:", r.status_code, self.provider.type)
         if r.status_code == 200:
             return r.json()["tasks"]
         else:
