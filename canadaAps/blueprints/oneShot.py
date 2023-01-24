@@ -30,4 +30,10 @@ def scrape():
         task = Task(scrape_details["id"], scrape_details["lat"], scrape_details["long"])
 
     results = scraper.scrape(task)
-    return {"results": results.results}
+    print(results.results, '33rm')
+    if provider is Provider.rentCanada:
+        return {"results": results.results}
+    elif provider is Provider.rentFaster:
+        return {"results": results.results}
+    else:
+        return {"results": results.results}

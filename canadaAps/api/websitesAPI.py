@@ -57,6 +57,7 @@ class WebsitesAPI:
         s.proxies.update(proxy)
         response = s.get("https://www.rentcanada.com/api/listing/" + missing_url_id)
         data = response.json()
+        print(data, '60rm')
         url = data["listing"]["url"]
         print(url)
         return url
