@@ -2,6 +2,8 @@ import requests
 import datetime
 import os
 
+print(os.environ)
+
 BATCH_NUM = 1
 ZOOM_WIDTH = 13
 
