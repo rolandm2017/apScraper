@@ -26,7 +26,12 @@ class Scraper:
         while not successful_refresh:
             proxy_ip, proxy_port = self.proxy_tools.get_proxy_ip(proxy_list_choice)
             if proxy_ip is None or proxy_port is None:
+
+                print(f"Throttled! Switching from proxy {proxy_list_choice} to  {proxy_list_choice + 1}")
                 proxy_list_choice = proxy_list_choice + 1
+                # handle out of range (only have 0 to 9)
+                if proxy_list_choice == 9:
+                    proxy_list_choice = 0
             else:
                 successful_refresh = True
         proxy_dict = ProxyTools().create_proxy_dict(proxy_ip, proxy_port)
@@ -37,12 +42,6 @@ class Scraper:
         # ##
         # ###
         self.proxy_dict = proxy_dict
-        # if public_ip_is_correct:
-        #     self.proxy_dict = proxy_dict
-        # else:
-        #     print(proxy_dict, public_ip_is_correct, proxy_ip)
-        #     # TODO: if proxy ip isn't set, retry setting it <= 5x
-        #     raise NotImplementedError("The expected proxy IP was different from public IP")
 
     def ask_for_tasks(self):
         task_details = self.internal_api.ask_for_tasks()

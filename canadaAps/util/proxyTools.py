@@ -34,6 +34,10 @@ class ProxyTools:
             except KeyError as e:
                 print("e:", e)
                 print("error:", result)  # look whats on it, maybe something useful
+                error = result["detail"]
+                remaining_seconds = error[45:47]
+                print("sleeping for " + remaining_seconds)
+                sleep(int(remaining_seconds))
                 return selected_proxy_ip, selected_proxy_port
                 # File "/home/rlm/Code/canadaAps/canadaAps/util/proxyTools.py", line 26, in get_proxy_ip
                 # selected_proxy_ip = result["results"][choice]["proxy_address"]

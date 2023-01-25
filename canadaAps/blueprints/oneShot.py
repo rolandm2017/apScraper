@@ -32,8 +32,11 @@ def scrape():
     results = scraper.scrape(task)
     print(results.results, '33rm')
     if provider is Provider.rentCanada:
-        return {"results": results.results}
+        # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
+        return {"results": {"listings": results.results}}
     elif provider is Provider.rentFaster:
-        return {"results": results.results}
+        # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
+        return {"results": {"listings": results.results}}
     else:
-        return {"results": results.results}
+        # has to be this way so the parser receives "unprocessed.results.hits" as the data entrypoint
+        return {"results": {"hits": results.results}}

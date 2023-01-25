@@ -51,7 +51,6 @@ def scrape_stuff(provider, task):
     scraper = Scraper(provider, internal_api, websites_api)
 
     scraper.refresh_proxy()
-    print(scraper.provider, scraper.provider.type)
     for index in range(0, MAX_RETRIES):
         scrape = scraper.scrape(task)
         if scrape.success:
