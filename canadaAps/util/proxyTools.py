@@ -32,12 +32,12 @@ class ProxyTools:
                 selected_proxy_ip = result["results"][choice]["proxy_address"]
                 selected_proxy_port = result["results"][choice]["port"]
             except KeyError as e:
-                print(e)
-                print(result)  # look whats on it, maybe something useful
+                print("e:", e)
+                print("error:", result)  # look whats on it, maybe something useful
+                return selected_proxy_ip, selected_proxy_port
                 # File "/home/rlm/Code/canadaAps/canadaAps/util/proxyTools.py", line 26, in get_proxy_ip
                 # selected_proxy_ip = result["results"][choice]["proxy_address"]
                 # KeyError: 'results'
-                print("This again")
         return selected_proxy_ip, selected_proxy_port
 
     @staticmethod

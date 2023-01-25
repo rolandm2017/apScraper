@@ -21,7 +21,14 @@ class Scraper:
     def refresh_proxy(self):
         if self.proxy_dict:
             return  # no need to store it multiple times. also no need to request an ip from proxy service repeatedly
-        proxy_ip, proxy_port = self.proxy_tools.get_proxy_ip(0)
+        successful_refresh = False
+        proxy_list_choice = 0
+        while not successful_refresh:
+            proxy_ip, proxy_port = self.proxy_tools.get_proxy_ip(proxy_list_choice)
+            if proxy_ip is None or proxy_port is None:
+                proxy_list_choice = proxy_list_choice + 1
+            else:
+                successful_refresh = True
         proxy_dict = ProxyTools().create_proxy_dict(proxy_ip, proxy_port)
         # ###
         # ##
