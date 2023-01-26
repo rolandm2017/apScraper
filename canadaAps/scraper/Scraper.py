@@ -98,8 +98,14 @@ class Scraper:
         # No map boundaries needed here apparently
         # print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
+        num_of_results = results["listings"]
+        print("results:", results)
+        # log if results were nil
+        if num_of_results == 0:
+            print(f"Empty task discovered for {lat}, {long} at rentCanada")
+        print("len of results:" + str(len(results["listings"])))
         results = Scrape(results, True)
-        return results
+        return results, num_of_results
 
     def scrape_rent_faster(self, task):
         """
@@ -117,8 +123,13 @@ class Scraper:
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
+        num_of_results = results["listings"]
+        print("results:", results)
+        if num_of_results == 0:
+            print(f"Empty task discovered for {lat}, {long} at rentFaster")
+        print("len of results:" + str(len(results["listings"])))
         results = Scrape(results, True)
-        return results
+        return results, num_of_results
 
     def scrape_rent_seeker(self, task):
         """
@@ -137,8 +148,13 @@ class Scraper:
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
 
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
+        num_of_results = results["hits"]
+        print("results:", results)
+        if num_of_results == 0:
+            print(f"Empty task discovered for {lat}, {long} at rentSeeker")
+        print("len of results:" + str(len(results["hits"])))
         results = Scrape(results, True)
-        return results
+        return results, num_of_results
 
     def get_missing_url_for_id(self, missing_url_id):
         missing_url = self.web_api.get_missing_url(missing_url_id, self.proxy_dict)

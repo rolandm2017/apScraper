@@ -156,6 +156,9 @@ for provider in providers:
         bounds = get_bounds_for(provider_name)
         radius = 24
         grid = get_grid_plan(start_coords, bounds, radius)
+        for entry in grid["gridCoords"]:
+            print(entry)
+        raise ValueError('pause')
         queue_payload = {
             "provider": provider_name,
             "cityName": city.name,

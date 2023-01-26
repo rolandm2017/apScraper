@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+import json
 
 from canadaAps.scraper.Scraper import Scraper
 from canadaAps.scraper.Task import Task
@@ -29,14 +30,25 @@ def scrape():
     else:
         task = Task(scrape_details["id"], scrape_details["lat"], scrape_details["long"])
 
-    results = scraper.scrape(task)
-    print(results.results, '33rm')
+    results, num_of_results = scraper.scrape(task)
+    print("\n\n\n\n\n\n\n\n\n\n\n\n======\n\n--\n\n--\n\n--")
+    print(results, num_of_results, '35rm')
+    # formatted json output
+    # print(results.get_results(), '35rm')
+    # print(json.dumps(results, indent=4))
+    print("return payload: 34rm")
+    # the_goods = results["results"]
+    # print(the_goods, '37rm')
+    # raise ValueError("pause")
     if provider is Provider.rentCanada:
         # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
-        return {"results": {"listings": results.results}}
+        payload = {"results": {"listings": results.get_results()}}
+        return payload
     elif provider is Provider.rentFaster:
         # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
-        return {"results": {"listings": results.results}}
+        payload = {"results": {"listings": results.get_results()}}
+        return payload
     else:
         # has to be this way so the parser receives "unprocessed.results.hits" as the data entrypoint
-        return {"results": {"hits": results.results}}
+        payload = {"results": {"hits": results.get_results()}}
+        return payload

@@ -11,29 +11,6 @@ from canadaAps.api.websitesAPI import WebsitesAPI
 from canadaAps.scraper.Task import Task
 
 
-
-class Test:
-    def __init__(self, x):
-        self.x = x
-
-    def incrememt(self):
-        self.x = self.x + 1000
-
-    def get(self):
-        print(self.x)
-        return self.x
-
-
-t = Test(5)
-
-
-@current_app.task(name="delayed_math")
-def delayed_math(x):
-    sleep(x / 10)
-    t.incrememt()
-    return t.get(), hex(id(t))
-
-
 MAX_RETRIES = 5
 END_OF_LOOP = MAX_RETRIES - 1
 
@@ -43,7 +20,6 @@ def scrape_stuff(provider, task):
     task_json = json.loads(task)
     task = Task(task_json["identifier"], task_json["lat"], task_json["long"], task_json["viewport_width"])
     provider = Provider(provider)
-
     # # fixme: isnt remaking these objects over and over pretty costly?
     websites_api = WebsitesAPI()
     internal_api = InternalAPI(provider)
@@ -52,9 +28,11 @@ def scrape_stuff(provider, task):
 
     scraper.refresh_proxy()
     for index in range(0, MAX_RETRIES):
-        scrape = scraper.scrape(task)
+        scrape, num_of_results = scraper.scrape(task)
         if scrape.success:
             scraper.report_apartments_and_mark_complete(task, scrape)
+            if num_of_results == 0:
+                return "Empty"
             return "success!"
         else:
             # todo: determine type of failure. "is banned?" "429?"

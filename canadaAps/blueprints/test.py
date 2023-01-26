@@ -20,30 +20,6 @@ def test():
     return scraper.get_results()
 
 
-from ..celeryTasks.celeryTasks import delayed_math
-@test_blueprint.route("/pretend_tasks2", methods=["POST"])
-def pretend2():
-    times = request.json["pretend"]
-    print(times, "34rm")
-    responses = []
-    for t in times:
-        x = delayed_math.apply_async(args=[t])
-        print(x, "38rm")
-        responses.append(x.id)
-    return responses
-
-# @test_blueprint.route("/pretend_tasks", methods=["POST"])
-# @shared_task(name='celery_tasks.pretend')
-# def pretend():
-#     times = request.json["pretend"]
-#     responses = []
-#     for t in times:
-#         # async_result = current_app.celery.send_task("celery_tasks.pretend", args=[int(t)])
-#         r = divide(t)
-#         responses.append(r)
-#         # responses.append(async_result.id)
-#     return responses
-
 @test_blueprint.route("/check_pretend")
 def get_pretend_tasks():
     celery = current_celery_app

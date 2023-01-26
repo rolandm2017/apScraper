@@ -24,6 +24,8 @@ def activate():
     print("TASKS: " + str(len(tasks)), "31rm")
     added_tasks = []
     for i in range(0, len(tasks)):
+        task_id = tasks[i]["taskId"]
+        print(task_id, '28rm')
         async_request = scrape_stuff.apply_async(args=[provider, tasks[i].to_json()])
         added_tasks.append([async_request.id, tasks[i].identifier])
     return added_tasks
