@@ -10,8 +10,9 @@ class City:
         return {"lat": self.lat, "long": self.long}
 
 class Provider:
-    def __init__(self, name):
+    def __init__(self, name, radius):
         self.name = name
+        self.radius = radius
         self.info = None
 
     def set_viewport_info(self, info):

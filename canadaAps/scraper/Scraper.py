@@ -92,14 +92,15 @@ class Scraper:
 
         lat = task.lat  # was task["lat"]
         long = task.long  # task["long"]
-
+        print(f"getting scrape for rent canada at {long}, {lat}")
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         # No map boundaries needed here apparently
         # print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
-        num_of_results = results["listings"]
-        print("results:", results)
+        num_of_results = len(results["listings"])
+        print("\n==\n==\n--\n==\n--\n==")
+        print("results:", len(results["listings"]))
         # log if results were nil
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentCanada")
@@ -123,8 +124,9 @@ class Scraper:
         start = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
-        num_of_results = results["listings"]
-        print("results:", results)
+        num_of_results = len(results["listings"])
+        print("\n==\n==\n--\n==\n--\n==")
+        print("results:", len(results["listings"]))
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentFaster")
         print("len of results:" + str(len(results["listings"])))
@@ -148,8 +150,9 @@ class Scraper:
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
 
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
-        num_of_results = results["hits"]
-        print("results:", results)
+        num_of_results = len(results["hits"])
+        print("\n==\n==\n--\n==\n--\n==\n 154rm")
+        print("results:", len(results["hits"]))
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentSeeker")
         print("len of results:" + str(len(results["hits"])))

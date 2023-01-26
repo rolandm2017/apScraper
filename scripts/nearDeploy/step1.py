@@ -60,7 +60,7 @@ def get_admin_jwt(credentials):
 admin_jwt = get_admin_jwt(admin_credentials)
 print("admin jwt:", admin_jwt)
 
-providers = [Provider("rentCanada"), Provider("rentFaster"), Provider("rentSeeker")]
+providers = [Provider("rentCanada", 14), Provider("rentFaster", 14), Provider("rentSeeker", 14)]
 
 
 cities = [
@@ -138,7 +138,6 @@ seeker_grid_payloads = []
 base_city = City("Montreal", "Quebec", 49.2827, -123.1207)  # 10
 
 print(base_city.name, '36rm')
-providers = [Provider("rentCanada"), Provider("rentFaster"), Provider("rentSeeker")]
 # providers = [Provider("rentFaster"), Provider("rentSeeker")]
 
 # step 1: get the viewport width and store it
@@ -154,11 +153,11 @@ for provider in providers:
     for city in cities:
         start_coords = city.get_center_coords()
         bounds = get_bounds_for(provider_name)
-        radius = 24
-        grid = get_grid_plan(start_coords, bounds, radius)
-        for entry in grid["gridCoords"]:
-            print(entry)
-        raise ValueError('pause')
+        grid = get_grid_plan(start_coords, bounds, provider.radius)
+        # for entry in grid["gridCoords"]:
+        #     print(provider_name)
+        #     print(entry)
+        # raise ValueError('pause')
         queue_payload = {
             "provider": provider_name,
             "cityName": city.name,

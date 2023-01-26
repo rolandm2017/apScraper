@@ -8,6 +8,8 @@ from canadaAps.scraper.Provider import Provider
 from canadaAps.api.internalAPI import InternalAPI
 from canadaAps.api.websitesAPI import WebsitesAPI
 
+from canadaAps.util.colors import bcolors
+
 one_shot_scrape_blueprint = Blueprint('one_shot_scrape_blueprint', __name__)
 
 
@@ -17,6 +19,7 @@ def scrape():
     scrape_details = request.json
 
     provider = scrape_details["provider"]
+    print("checking provider:" + provider)
     p = Provider(provider)
 
     websites_api = WebsitesAPI()
@@ -31,8 +34,8 @@ def scrape():
         task = Task(scrape_details["id"], scrape_details["lat"], scrape_details["long"])
 
     results, num_of_results = scraper.scrape(task)
-    print("\n\n\n\n\n\n\n\n\n\n\n\n======\n\n--\n\n--\n\n--")
-    print(results, num_of_results, '35rm')
+    print("\n\n======\n\n--\n\n--\n\n--")
+    print(num_of_results, '35rm')
     # formatted json output
     # print(results.get_results(), '35rm')
     # print(json.dumps(results, indent=4))
@@ -42,13 +45,24 @@ def scrape():
     # raise ValueError("pause")
     if provider is Provider.rentCanada:
         # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
-        payload = {"results": {"listings": results.get_results()}}
+        # payload = {"listings": results.get_results()}
+        print(bcolors.OKBLUE + f"\n===\n=====\n=====\n===\nsending payload for: {provider}" + bcolors.ENDC)
+        payload = results.get_results()
+        print(payload)
         return payload
     elif provider is Provider.rentFaster:
         # has to be this way so the parser receives "unprocessed.results.listings" as the data entrypoint
-        payload = {"results": {"listings": results.get_results()}}
+        # payload = {"listings": results.get_results()}
+        print(bcolors.OKBLUE + f"\n===\n===\n====\n====\nsending payload for: {provider}" + bcolors.ENDC)
+
+        payload = results.get_results()
+        print(payload)
         return payload
     else:
         # has to be this way so the parser receives "unprocessed.results.hits" as the data entrypoint
-        payload = {"results": {"hits": results.get_results()}}
-        return payload
+        # payload = {"hits": results.get_results()}
+        print(bcolors.OKBLUE + f"\n===\n===\n====\nsending payload for: {provider}" + bcolors.ENDC)
+
+        payload = results.get_results()
+        print(payload)
+        return results.get_results()
