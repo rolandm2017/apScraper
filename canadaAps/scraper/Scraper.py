@@ -3,6 +3,7 @@ from .Provider import Provider
 from .QueryString import QueryString
 from .MapBoundaries import MapBoundaries
 from .Scrape import Scrape
+from canadaAps.util.colors import bcolors
 
 from canadaAps.scraper.Task import Task
 
@@ -92,14 +93,15 @@ class Scraper:
 
         lat = task.lat  # was task["lat"]
         long = task.long  # task["long"]
-        print(f"getting scrape for rent canada at {long}, {lat}")
+        viewport_width = task.viewport_width
+        print(f"getting scrape for rent canada at {long}, {lat}, {viewport_width}")
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         # No map boundaries needed here apparently
         # print(lat, long, bounds, start, self.proxy_dict, "78rm")
         results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
         num_of_results = len(results["listings"])
-        print("\n==\n==\n--\n==\n--\n==")
+        print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["listings"]))
         # log if results were nil
         if num_of_results == 0:
@@ -118,14 +120,16 @@ class Scraper:
         # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
         lat = task.lat
         long = task.long
+        viewport_width = task.viewport_width
+        print(f"getting scrape for rent faster at {long}, {lat}, {viewport_width}")
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
         start = "https://www.rentfaster.ca/api/map.json"
-        raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
+        raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"], viewport_width)
         results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
         num_of_results = len(results["listings"])
-        print("\n==\n==\n--\n==\n--\n==")
+        print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["listings"]))
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentFaster")
@@ -143,15 +147,17 @@ class Scraper:
         # Note: Used to have "location = request.json" but that'll have to live *outside* of this method
         lat = task.lat
         long = task.long
+        viewport_width = task.viewport_width
+        print(f"getting scrape for rent seeker at {long}, {lat}, {viewport_width}")
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
         start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
-        raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
+        raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"], viewport_width)
 
         results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
         num_of_results = len(results["hits"])
-        print("\n==\n==\n--\n==\n--\n==\n 154rm")
+        print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["hits"]))
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentSeeker")

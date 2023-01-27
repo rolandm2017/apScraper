@@ -12,6 +12,12 @@ end = start.replace(open_bracket, "{").replace(close_bracket, "}").replace(quota
 end2 = start2.replace(open_bracket, "{").replace(close_bracket, "}").replace(quotation_mark, '"')
 end3 = start3.replace(open_bracket, "{").replace(close_bracket, "}").replace(quotation_mark, '"')
 
+def translate_to_english(start):
+    print("translating")
+    translated = start.replace(open_bracket, "{").replace(close_bracket, "}").replace(quotation_mark, '"')
+    translated = translated.replace("%5B", "[").replace("%5D", "]").replace("%22", '"').replace("%3D", "=").replace("%2C", ",")
+    return translated
+
 x = "https://www.rentcanada.com/api/map-markers?filters=%7B%22amenities%22:%7B%22checklist%22:[]%7D,%22utilities%22:%7B%22checklist%22:[]%7D,%22petPolicies%22:%7B%22checklist%22:[]%7D,%22rentalTypes%22:%7B%22checklist%22:[]%7D,%22beds%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22baths%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22rates%22:%7B%22min%22:null,%22max%22:null%7D,%22sqft%22:%7B%22min%22:null,%22max%22:null%7D,%22mapBounds%22:%7B%22north%22:%7B%22lat%22:45.553102184226546,%22lng%22:-73.5512056051919%7D,%22south%22:%7B%22lat%22:45.44661960947297,%22lng%22:-73.63583466402979%7D%7D,%22keyword%22:null,%22furnished%22:null%7D"
 x = "%7B%22amenities%22:%7B%22checklist%22:[]%7D,%22utilities%22:%7B%22checklist%22:[]%7D,%22petPolicies%22:%7B%22checklist%22:[]%7D,%22rentalTypes%22:%7B%22checklist%22:[]%7D,%22beds%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22baths%22:%7B%22min%22:null,%22max%22:null,%22checklist%22:[]%7D,%22rates%22:%7B%22min%22:null,%22max%22:null%7D,%22sqft%22:%7B%22min%22:null,%22max%22:null%7D,%22mapBounds%22:%7B%22north%22:%7B%22lat%22:45.517364677766764,%22lng%22:-73.54265710766485%7D,%22south%22:%7B%22lat%22:45.49077609093645,%22lng%22:-73.57162496502569%7D%7D,%22keyword%22:null,%22furnished%22:null%7D"
 # print(x.replace("%22", '"').replace("%7B", "{").replace("%7D", "}"))

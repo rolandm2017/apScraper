@@ -4,7 +4,7 @@ import json
 #
 
 class Task:
-    def __init__(self, identifier, lat, long, viewport_width="default",):
+    def __init__(self, identifier, lat, long, viewport_width):
         self.identifier = identifier
         self.lat = lat
         self.long = long
