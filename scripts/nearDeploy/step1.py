@@ -141,8 +141,8 @@ print(base_city.name, '36rm')
 # providers = [Provider("rentFaster"), Provider("rentSeeker")]
 
 # step 1: get the viewport width and store it
-rent_canada_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentCanada", 5)
-# rent_faster_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentFaster", 5)
+# rent_canada_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentCanada", 5)
+rent_faster_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentFaster", 5)
 # rent_seeker_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentSeeker", 5)
 # rent_canada_viewport_details = {
 #     'north': 45.5521275,

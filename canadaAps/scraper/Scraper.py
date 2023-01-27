@@ -96,10 +96,10 @@ class Scraper:
         viewport_width = task.viewport_width
         print(f"getting scrape for rent canada at {long}, {lat}, {viewport_width}")
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
-        start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
+        start_url = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         # No map boundaries needed here apparently
         # print(lat, long, bounds, start, self.proxy_dict, "78rm")
-        results = self.web_api.scrape_rent_canada(start, self.proxy_dict)
+        results = self.web_api.scrape_rent_canada(start_url, self.proxy_dict)
         num_of_results = len(results["listings"])
         print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["listings"]))
@@ -125,9 +125,9 @@ class Scraper:
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
-        start = "https://www.rentfaster.ca/api/map.json"
+        start_url = "https://www.rentfaster.ca/api/map.json"
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"], viewport_width)
-        results = self.web_api.scrape_rent_faster(start, self.proxy_dict, raw_text_body)
+        results = self.web_api.scrape_rent_faster(start_url, self.proxy_dict, raw_text_body)
         num_of_results = len(results["listings"])
         print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["listings"]))
@@ -152,10 +152,10 @@ class Scraper:
 
         bounds = MapBoundaries(self.provider).make_boundaries(lat, long)
 
-        start = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
+        start_url = QueryString(self.provider).make_query_string(bounds["north"], bounds["west"], bounds["south"], bounds["east"])
         raw_json_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"], viewport_width)
 
-        results = self.web_api.scrape_rent_seeker(start, self.proxy_dict, raw_json_body)
+        results = self.web_api.scrape_rent_seeker(start_url, self.proxy_dict, raw_json_body)
         num_of_results = len(results["hits"])
         print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         print("results:", len(results["hits"]))
