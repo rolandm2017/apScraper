@@ -14,11 +14,16 @@ class MapBoundaries:
             lat_padding = 0.053241287376788904 - 0.02  # - 0.02 made the viewport narrower! Yay
             long_padding = 0.04231452941894531 - 0.02
         elif self.provider.type == Provider.rentFaster:
-            lat_padding = 0.0978503023843551  # calculated in the distance.py file
-            long_padding = 0.09698867797851562
+            # 01/26 zombied
+            # lat_padding = 0.0978503023843551  # calculated in the distance.py file
+            # long_padding = 0.09698867797851562
+            lat_padding = 0.0978503023843551 - 0.07  # trying to make viewport sufficiently narrow.
+            long_padding = 0.09698867797851562 - 0.07
         elif self.provider.type == Provider.rentSeeker:
-            lat_padding = 0.0978503023843551  # calculated in the distance.py file
-            long_padding = 0.09698867797851562
+            # lat_padding = 0.0978503023843551  # calculated in the distance.py file
+            # long_padding = 0.09698867797851562
+            lat_padding = 0.0978503023843551 - 0.07  # calculated in the distance.py file
+            long_padding = 0.09698867797851562 - 0.07
         else:
             raise ValueError("No provider given in MapBoundaries")
 
@@ -51,13 +56,12 @@ class MapBoundaries:
             print(center_lat, center_long, '46rm')
 
             p1 = "l=11,45.3902,-73.5088&area=45.57384111972111,-73.19057049164543,45.20591177222008,-73.82709087738762&e=zoom_changed&exclude="
-            return p1
-            p2 = "l=12%2C45.4219%2C-73.5651&area=45.51372840372307%2C-73.40583385834465%2C45.32986693146944%2C-73.72409405121574&e=zoom_changed&exclude="
-            return p2
+            # return p1
+            # p3 is 'kmNorthSouth': 2.6550799988296414, 'kmEastWest': 17.277423224059678}, way too far east-west
             # p3 = "l=13%2C45.4581%2C-73.5716&area=45.50404250896503%2C-73.49199619272699%2C45.41217082255017%2C-73.65112628916253&e=zoom_changed&exclude="
             # return p3
             url_with_strange_chars = f"l={viewport_width},{center_lat_four_decimals},{center_long_four_decimals}&" \
-                   f"area=${lat1},${long1},${lat2},${long2}&exclude="
+                   f"area={lat1},{long1},{lat2},{long2}&exclude="
             print("add_map_boundaries output")
             print(translate_to_english(url_with_strange_chars))
             return url_with_strange_chars
