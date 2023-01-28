@@ -12,7 +12,7 @@ class City:
 class Provider:
     def __init__(self, name, radius):
         self.name = name
-        self.radius = radius
+        self.radius = radius  # radius controls the width of the scan. but "1" is still about 20x wider than needed.
         self.info = None
 
     def set_viewport_info(self, info):

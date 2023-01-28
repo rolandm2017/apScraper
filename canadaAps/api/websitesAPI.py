@@ -18,7 +18,6 @@ class WebsitesAPI:
 
         r = s.get(start, headers=headers)
         results = r.json()
-        # print(results, "18rm")
         return results
 
     @staticmethod

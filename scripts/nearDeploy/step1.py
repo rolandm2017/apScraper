@@ -4,13 +4,13 @@ import os
 from dotenv import load_dotenv
 
 from classes import Provider, City, Payload
+BATCH_NUM = 37
+ZOOM_WIDTH = 13
+RADIUS = 4
 
 load_dotenv()
 
 print(os.getenv("ADMIN_EMAIL"), os.getenv("ADMIN_PASSWORD"))
-
-BATCH_NUM = 2
-ZOOM_WIDTH = 13
 
 login_url = "http://127.0.0.1:8000/auth/authenticate"
 ref_token_url = "http://127.0.0.1:8000/auth/refresh-token"
@@ -60,20 +60,20 @@ def get_admin_jwt(credentials):
 admin_jwt = get_admin_jwt(admin_credentials)
 print("admin jwt:", admin_jwt)
 
-providers = [Provider("rentCanada", 5)]
+providers = [Provider("rentCanada", RADIUS)]
 # providers = [Provider("rentCanada", 4), Provider("rentFaster", 4), Provider("rentSeeker", 4)]
 
 
 cities = [
-    City("Vancouver", "British Columbia", 49.2827, -123.1207),  # 1
-    City("Calgary", "Alberta", 51.0447, -114.0719),  # 2
-    City("Edmonton", "Alberta", 53.5461, -113.4937),  # 3
-    City("Winnipeg", "Manitoba", 49.8954, -97.1385),  # 4
-    City("Toronto", "Ontario", 43.6532, -79.3832),  # 5
-    City("Mississauga", "Ontario", 43.589, -79.6441),  # 6
-    City("Brampton", "Ontario", 43.7315, -79.7624),  # 7
-    City("Hamilton", "Ontario", 43.2557, -79.8711),  # 8
-    City("Ottawa", "Ontario", 45.4215, -75.6972),  # 9
+    # City("Vancouver", "British Columbia", 49.2827, -123.1207),  # 1
+    # City("Calgary", "Alberta", 51.0447, -114.0719),  # 2
+    # City("Edmonton", "Alberta", 53.5461, -113.4937),  # 3
+    # City("Winnipeg", "Manitoba", 49.8954, -97.1385),  # 4
+    # City("Toronto", "Ontario", 43.6532, -79.3832),  # 5
+    # City("Mississauga", "Ontario", 43.589, -79.6441),  # 6
+    # City("Brampton", "Ontario", 43.7315, -79.7624),  # 7
+    # City("Hamilton", "Ontario", 43.2557, -79.8711),  # 8
+    # City("Ottawa", "Ontario", 45.4215, -75.6972),  # 9
     City("Montreal", "Quebec", 45.5019, -73.5674),  # 10
 ]
 
@@ -102,9 +102,7 @@ def get_viewport_width(city_name, state, provider_name, viewport_width):
     get_viewport_payload = {"city": city_name, "state": state, "provider": provider_name, "zoomWidth": viewport_width}
     viewport_width_response = requests.post(viewport_width_url, data=get_viewport_payload)
     status = viewport_width_response.status_code
-    print(viewport_width_response, '31rm')
     details = viewport_width_response.json()
-    print(details, '33rm')
     return details
 
 
@@ -144,62 +142,45 @@ print(base_city.name, '36rm')
 rent_canada_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentCanada", 5)
 rent_faster_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentFaster", 5)
 rent_seeker_viewport_details = get_viewport_width(base_city.name, base_city.state, "rentSeeker", 5)
-# rent_canada_viewport_details = {
-#     'north': 45.5521275,
-#     'east': -73.5389464,
-#     'south': 45.4509234,
-#     'west': -73.6094939,
-#     'latitudeChange': 0.1012040999999968,
-#     'longitudeChange': 0.07054750000000354,
-#     'kmNorthSouth': 3.175507162201125,
-#     'kmEastWest': 7.8445240874574
-# }
-# rent_faster_viewport_details = {
-#     'north': 47.15,
-#     'east': -72.283333,
-#     'south': 45.4269725,
-#     'west': -73.8954914,
-#     'latitudeChange': 1.7230275000000006,
-#     'longitudeChange': 1.6121583999999984,
-#     'kmNorthSouth': 53.14388225926579,
-#     'kmEastWest': 179.26383502740902
-# }
-#
-# rent_seeker_viewport_details = {
-#     'north': '45.5816140',
-#     'east': '-73.6617082',
-#     'south': '45.4487298',
-#     'west': '-73.4725306',
-#     'latitudeChange': 0.13288419999999945,
-#     'longitudeChange': 0.18917760000000783,
-#     'kmNorthSouth': 4.203415642752733,
-#     'kmEastWest': 21.035589354794546
-# }
+
 
 print(rent_canada_viewport_details)
 print(rent_faster_viewport_details)
 print(rent_seeker_viewport_details)
-exit()
+# count for fun
+added_tasks = 0
 # step 2:
 # use step 1 info to
 # plan a grid in each city, for each provider
+failures = 0
 for provider in providers:
     provider_name = provider.name
     for city in cities:
         start_coords = city.get_center_coords()
         bounds = get_bounds_for(provider_name)
         grid = get_grid_plan(start_coords, bounds, provider.radius)
+        print(len(grid["gridCoords"]))
+        # continue
+        for point in grid["gridCoords"]:
+            # generic sanity check: "is it at least in canada?"
+            is_in_canada = point["lat"] > 42
+            if not is_in_canada:
+                # print(point)
+                print("something went wrong")
+                failures = failures + 1
+                # exit()
         # for entry in grid["gridCoords"]:
         #     print(provider_name)
         #     print(entry)
         # raise ValueError('pause')
+        added_tasks = added_tasks + len(grid["gridCoords"])
         queue_payload = {
             "provider": provider_name,
             "cityName": city.name,
-            "batchNum": 5,
+            "batchNum": BATCH_NUM,
             "zoomWidth": 13,
-            # "coords": grid["gridCoords"],
-            "coords": [start_coords],
+            "coords": grid["gridCoords"],
+            # "coords": [start_coords],
         }
         if provider_name == "rentCanada":
             canada_grid_payloads.append(queue_payload)
@@ -210,13 +191,27 @@ for provider in providers:
         else:
             raise ValueError("Unexpected value")
 
+# sanity check
+if failures > 0:
+    print("failures:")
+    print(failures)
+    # exit()
 
 # step 3:
 # queue scans
+passed = 0
+failed = 0
 for group in [seeker_grid_payloads, faster_grid_payloads, canada_grid_payloads]:
     for payload in group:
-        print(payload, '184rm')
+        print(len(payload), '184rm')
         pass_fail = queue_grid_scan(payload)
+
         print("Pass and fail:")
         print(pass_fail)
+        passed = passed + pass_fail["pass"]
+        failed = failed + pass_fail["fail"]
+        print(pass_fail)
 
+print(added_tasks)
+print(passed)
+print(BATCH_NUM, RADIUS)
