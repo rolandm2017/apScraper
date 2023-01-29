@@ -102,7 +102,6 @@ class Scraper:
         results = self.web_api.scrape_rent_canada(start_url, self.proxy_dict)
         num_of_results = len(results["listings"])
         print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
-        print("results:", len(results["listings"]))
         # log if results were nil
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentCanada")
@@ -129,8 +128,7 @@ class Scraper:
         raw_text_body = MapBoundaries(self.provider).add_map_boundaries(bounds["north"], bounds["west"], bounds["south"], bounds["east"], viewport_width)
         results = self.web_api.scrape_rent_faster(start_url, self.proxy_dict, raw_text_body)
         num_of_results = len(results["listings"])
-        print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
-        print("results:", len(results["listings"]))
+        # print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentFaster")
         print("len of results:" + str(len(results["listings"])))
@@ -158,7 +156,6 @@ class Scraper:
         results = self.web_api.scrape_rent_seeker(start_url, self.proxy_dict, raw_json_body)
         num_of_results = len(results["hits"])
         print(bcolors.OKCYAN + "\n==\n==" + bcolors.ENDC)
-        print("results:", len(results["hits"]))
         if num_of_results == 0:
             print(f"Empty task discovered for {lat}, {long} at rentSeeker")
         print("len of results:" + str(len(results["hits"])))

@@ -14,3 +14,7 @@
    (b) from project root, run 
 
 5. "celery -A canadaAps.rentCanada worker --loglevel=INFO"
+
+# How to purge the worker queue
+
+"celery -A canadaAps.rentCanada purge"

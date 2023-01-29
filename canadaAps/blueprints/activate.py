@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, request
 
 from canadaAps.scraper.Scraper import Scraper
@@ -15,7 +16,8 @@ activate_blueprint = Blueprint('activate_blueprint', __name__)
 def activate():
     print("activated", request.args.to_dict(), request.json)
     provider = request.json["provider"]
-    print(provider, "21rm")
+    city = request.json["city"]
+    print(provider, city, "21rm")
     provider_object = Provider(provider)
     websites_api = WebsitesAPI()
     internal_api = InternalAPI(provider_object)
@@ -24,7 +26,8 @@ def activate():
     print("TASKS: " + str(len(tasks)), "31rm")
     added_tasks = []
     for i in range(0, len(tasks)):
-        task_id = tasks[i]["taskId"]
+        print(json.dumps(tasks[i].__dict__))
+        task_id = tasks[i].identifier
         print(task_id, '28rm')
         async_request = scrape_stuff.apply_async(args=[provider, tasks[i].to_json()])
         added_tasks.append([async_request.id, tasks[i].identifier])

@@ -8,6 +8,9 @@ from canadaAps.blueprints.test import test_blueprint
 from canadaAps.blueprints.oneShot import one_shot_scrape_blueprint
 from canadaAps.blueprints.healthCheck import health_check_blueprint
 from canadaAps.blueprints.fetchURL import fetch_url_blueprint
+from canadaAps.blueprints.purgeCelery import purge_blueprint
+from canadaAps.blueprints.inspectQueue import inspect_queue_blueprint
+from canadaAps.blueprints.logging import logging_blueprint
 
 
 # # todo: make the same celery usable over multiple files
@@ -55,8 +58,9 @@ def register_blueprints(app):
     app.register_blueprint(one_shot_scrape_blueprint)
     app.register_blueprint(health_check_blueprint)
     app.register_blueprint(fetch_url_blueprint)
-
-    # app.register_blueprint(auth_blueprint, url_prefix='/users')
+    app.register_blueprint(purge_blueprint)
+    app.register_blueprint(inspect_queue_blueprint)
+    app.register_blueprint(logging_blueprint)
 
 
 def register_error_handlers(app):

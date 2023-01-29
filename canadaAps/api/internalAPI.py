@@ -24,8 +24,6 @@ class InternalAPI:
 
     def report_findings_and_mark_complete(self, task, apartments):
         payload = {"provider": self.provider.type, "taskId": task.identifier, "apartments": apartments}
-        print("sending payload:")
-        print(payload)
         r = requests.post(task_queue_address + "/report-findings-and-mark-complete", json=payload)
         return r.status_code == 200
 

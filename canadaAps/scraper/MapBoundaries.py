@@ -63,7 +63,7 @@ class MapBoundaries:
             url_with_strange_chars = f"l={viewport_width},{center_lat_four_decimals},{center_long_four_decimals}&" \
                    f"area={lat1},{long1},{lat2},{long2}&exclude="
             print("add_map_boundaries output")
-            print(translate_to_english(url_with_strange_chars))
+            # print(translate_to_english(url_with_strange_chars))
             return url_with_strange_chars
         elif self.provider.get_type() == Provider.rentSeeker:
             print(f"trying {self.provider.get_type()} with viewport width {viewport_width}")
@@ -72,7 +72,7 @@ class MapBoundaries:
             # Note2 01/26: lat2,long2, lat1, long1 reflects the swLatLong, neLatLong format of the actual website
             params_with_strange_chars = "query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&insideBoundingBox=[[" + str(lat2) + "," + str(long2) + "," + str(lat1) + "," + str(long1) + "]]"
             print("add_map_boundaries output")
-            print(translate_to_english(params_with_strange_chars))
+            # print(translate_to_english(params_with_strange_chars))
             return {"params": params_with_strange_chars}
         else:
             raise ValueError("No provider given in MapBoundaries")

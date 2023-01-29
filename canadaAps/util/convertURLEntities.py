@@ -32,5 +32,5 @@ x = "https://www.rentcanada.com/api/map-markers?filters=%7B%22amenities%22:%7B%2
 # print(x.replace("%5B", "[").replace("%2C", ",").replace("%5D", "]"))
 
 x = "query=&hitsPerPage=1000&page=0&numericFilters=%5B%5B%22type%3D2%22%5D%5D&insideBoundingBox=%5B%5B45.45344020494669%2C-73.65633240761402%2C45.6491408097154%2C-73.46235505165698%5D%5D"
-print(x.replace("%5B", "[").replace("%5D", "]").replace("%22", '"').replace("%3D", "=").replace("%2C", ","))
+# print(x.replace("%5B", "[").replace("%5D", "]").replace("%22", '"').replace("%3D", "=").replace("%2C", ","))
 

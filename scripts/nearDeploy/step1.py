@@ -4,7 +4,10 @@ import os
 from dotenv import load_dotenv
 
 from classes import Provider, City, Payload
-BATCH_NUM = 37
+
+
+BATCH_NUM = 3
+ADD_CITY_MARKERS = BATCH_NUM == 1
 ZOOM_WIDTH = 13
 RADIUS = 4
 
@@ -60,20 +63,20 @@ def get_admin_jwt(credentials):
 admin_jwt = get_admin_jwt(admin_credentials)
 print("admin jwt:", admin_jwt)
 
-providers = [Provider("rentCanada", RADIUS)]
-# providers = [Provider("rentCanada", 4), Provider("rentFaster", 4), Provider("rentSeeker", 4)]
+# providers = [Provider("rentCanada", RADIUS)]
+providers = [Provider("rentCanada", RADIUS), Provider("rentFaster", RADIUS), Provider("rentSeeker", RADIUS)]
 
 
 cities = [
-    # City("Vancouver", "British Columbia", 49.2827, -123.1207),  # 1
-    # City("Calgary", "Alberta", 51.0447, -114.0719),  # 2
-    # City("Edmonton", "Alberta", 53.5461, -113.4937),  # 3
-    # City("Winnipeg", "Manitoba", 49.8954, -97.1385),  # 4
-    # City("Toronto", "Ontario", 43.6532, -79.3832),  # 5
-    # City("Mississauga", "Ontario", 43.589, -79.6441),  # 6
-    # City("Brampton", "Ontario", 43.7315, -79.7624),  # 7
-    # City("Hamilton", "Ontario", 43.2557, -79.8711),  # 8
-    # City("Ottawa", "Ontario", 45.4215, -75.6972),  # 9
+    City("Vancouver", "British Columbia", 49.2827, -123.1207),  # 1
+    City("Calgary", "Alberta", 51.0447, -114.0719),  # 2
+    City("Edmonton", "Alberta", 53.5461, -113.4937),  # 3
+    City("Winnipeg", "Manitoba", 49.8954, -97.1385),  # 4
+    City("Toronto", "Ontario", 43.6532, -79.3832),  # 5
+    City("Mississauga", "Ontario", 43.589, -79.6441),  # 6
+    City("Brampton", "Ontario", 43.7315, -79.7624),  # 7
+    City("Hamilton", "Ontario", 43.2557, -79.8711),  # 8
+    City("Ottawa", "Ontario", 45.4215, -75.6972),  # 9
     City("Montreal", "Quebec", 45.5019, -73.5674),  # 10
 ]
 
@@ -132,6 +135,37 @@ canada_grid_payloads = []
 faster_grid_payloads = []
 seeker_grid_payloads = []
 
+if ADD_CITY_MARKERS:
+    print("########")
+    print("adding city markers")
+    print("########")
+    added = 0
+    for provider in providers:
+        provider_name = provider.name
+        for city in cities:
+            start_coords = city.get_center_coords()
+            queue_payload = {
+                "provider": provider_name,
+                "cityName": city.name,
+                "batchNum": BATCH_NUM,
+                "zoomWidth": 13,
+                "coords": [start_coords],  # enable this to plant a marker at the city's center
+            }
+            if provider_name == "rentCanada":
+                canada_grid_payloads.append(queue_payload)
+            elif provider_name == "rentFaster":
+                faster_grid_payloads.append(queue_payload)
+            elif provider_name == "rentSeeker":
+                seeker_grid_payloads.append(queue_payload)
+            else:
+                raise ValueError("Unexpected value")
+    for group in [seeker_grid_payloads, faster_grid_payloads, canada_grid_payloads]:
+        for payload in group:
+            pass_fail = queue_grid_scan(payload)
+            added = added + pass_fail["pass"]
+    print("added:" + str(added))
+    print("process complete, done")
+    exit()
 
 base_city = City("Montreal", "Quebec", 49.2827, -123.1207)  # 10
 
@@ -159,20 +193,8 @@ for provider in providers:
         start_coords = city.get_center_coords()
         bounds = get_bounds_for(provider_name)
         grid = get_grid_plan(start_coords, bounds, provider.radius)
-        print(len(grid["gridCoords"]))
-        # continue
-        for point in grid["gridCoords"]:
-            # generic sanity check: "is it at least in canada?"
-            is_in_canada = point["lat"] > 42
-            if not is_in_canada:
-                # print(point)
-                print("something went wrong")
-                failures = failures + 1
-                # exit()
-        # for entry in grid["gridCoords"]:
-        #     print(provider_name)
-        #     print(entry)
-        # raise ValueError('pause')
+        # print("grid length:" + str(len(grid["gridCoords"])))
+        #         # exit()
         added_tasks = added_tasks + len(grid["gridCoords"])
         queue_payload = {
             "provider": provider_name,
@@ -180,7 +202,6 @@ for provider in providers:
             "batchNum": BATCH_NUM,
             "zoomWidth": 13,
             "coords": grid["gridCoords"],
-            # "coords": [start_coords],
         }
         if provider_name == "rentCanada":
             canada_grid_payloads.append(queue_payload)
@@ -212,6 +233,6 @@ for group in [seeker_grid_payloads, faster_grid_payloads, canada_grid_payloads]:
         failed = failed + pass_fail["fail"]
         print(pass_fail)
 
-print(added_tasks)
-print(passed)
+print("planned to add tasks: " + str(added_tasks))
+print("passed: " + str(passed))
 print(BATCH_NUM, RADIUS)
