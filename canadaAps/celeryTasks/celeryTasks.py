@@ -44,7 +44,7 @@ def scrape_stuff(provider, task):
         if scrape.success:
             scraper.report_apartments_and_mark_complete(task, scrape)
             # log the result
-            write_log(task.identifier, provider_name, task.lat, task.long, num_of_results)
+            connect_and_write_log(task.identifier, provider_name, task.lat, task.long, num_of_results)
             # report result to backend
             if num_of_results == 0:
                 return str(task.identifier) + " Empty"

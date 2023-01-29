@@ -13,6 +13,17 @@ conn_str = f"mongodb+srv://plutownium:{mongo_pw}@cluster0.eruuecx.mongodb.net/?r
 client = MongoClient(conn_str)
 
 
+def connect_and_write_log(task_id, provider, lat, long, num_of_results):
+    # have to do it this way: "You are supposed to connect to the database inside the task"
+    # https://stackoverflow.com/questions/47882213/how-to-correctly-connect-to-mongodb-in-celery-worker
+    # https://stackoverflow.com/questions/49743258/mongodb-into-a-celery-task-flask-application
+    log = make_log(task_id, provider, lat, long, num_of_results)
+    with MongoClient(conn_str) as mongo_client:
+        logs_db = mongo_client["cel_logs"]
+        scan_collection = logs_db["scans"]
+        scan_collection.insert_one(log)
+
+
 def get_mongo_client():
     return client
 
