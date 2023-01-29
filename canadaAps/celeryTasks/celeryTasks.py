@@ -1,3 +1,5 @@
+from simple_chalk import green, yellow, red
+
 from time import sleep
 from celery import current_app
 import json
@@ -8,6 +10,7 @@ from canadaAps.scraper.MongoLogger import write_log
 
 from canadaAps.api.internalAPI import InternalAPI
 from canadaAps.api.websitesAPI import WebsitesAPI
+from canadaAps.scraper.Logger import report_progress
 
 from canadaAps.scraper.Task import Task
 
@@ -20,7 +23,7 @@ END_OF_LOOP = MAX_RETRIES - 1
 def scrape_stuff(provider, task):
     task_json = json.loads(task)
     task = Task(task_json["identifier"], task_json["lat"], task_json["long"], task_json["viewport_width"])
-    print("handling:" + json.dumps(task.__dict__))
+    print(report_progress("handling: " + json.dumps(task.__dict__)) + " for provider: " + provider)
     provider = Provider(provider)
     # # fixme: isnt remaking these objects over and over pretty costly?
     websites_api = WebsitesAPI()
@@ -40,7 +43,7 @@ def scrape_stuff(provider, task):
         if scrape.success:
             scraper.report_apartments_and_mark_complete(task, scrape)
             # log the result
-            write_log(task["identifier"], task["provider"], task["lat"], task["long"])
+            write_log(task.identifier, provider, task.lat, task.long)
             # report result to backend
             if num_of_results == 0:
                 return str(task.identifier) + " Empty"

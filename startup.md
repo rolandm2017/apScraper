@@ -17,4 +17,4 @@
 
 # How to purge the worker queue
 
-"celery -A canadaAps.rentCanada purge"
+** PURGE cmd ** "celery -A canadaAps.rentCanada purge"

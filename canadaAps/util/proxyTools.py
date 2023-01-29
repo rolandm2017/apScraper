@@ -1,8 +1,11 @@
+from simple_chalk import chalk
+
 from dotenv import load_dotenv
 import os
 from time import sleep
 
 from canadaAps.api.proxyAPI import ProxyAPI
+from canadaAps.scraper.Logger import report_progress
 
 load_dotenv()
 

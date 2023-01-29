@@ -39,10 +39,8 @@ def test3():
     db = client["cel_logs"]
     collection_name = db["scans"]
     docs = collection_name.find()
-    print(docs)
     d = []
     for doc in docs:
-        print(doc)
         d.append(convert_doc_to_dict(doc))
     return d
 

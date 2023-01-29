@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 from pymongo import MongoClient
 
+from canadaAps.scraper.Logger import report_progress
 
 load_dotenv()
 
@@ -25,7 +26,7 @@ collection = db["scans"]
 
 def write_log(task_id, provider, lat, long):
     log = make_log(task_id, provider, lat, long)
-    print("Logging: " + str(log.__dict__))
+    print(report_progress("Logged to MongoDB: " + str(log)))
     collection.insert_one(log)
 
 
