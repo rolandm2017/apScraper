@@ -17,6 +17,7 @@ class Config:
     TESTING = False
     WTF_CSRF_ENABLED = True
 
+
     # Settings applicable to all environments
     SECRET_KEY = os.getenv('SECRET_KEY', default='A very terrible secret key.')
 

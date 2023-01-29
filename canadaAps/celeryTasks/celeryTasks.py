@@ -21,9 +21,10 @@ END_OF_LOOP = MAX_RETRIES - 1
 
 @current_app.task(name="scrape_stuff")
 def scrape_stuff(provider, task):
+    provider_name = provider
     task_json = json.loads(task)
     task = Task(task_json["identifier"], task_json["lat"], task_json["long"], task_json["viewport_width"])
-    print(report_progress("handling: " + json.dumps(task.__dict__)) + " for provider: " + provider)
+    print(report_progress("handling: " + json.dumps(task.__dict__) + " for provider: " + provider))
     provider = Provider(provider)
     # # fixme: isnt remaking these objects over and over pretty costly?
     websites_api = WebsitesAPI()
@@ -43,7 +44,7 @@ def scrape_stuff(provider, task):
         if scrape.success:
             scraper.report_apartments_and_mark_complete(task, scrape)
             # log the result
-            write_log(task.identifier, provider, task.lat, task.long)
+            write_log(task.identifier, provider_name, task.lat, task.long, num_of_results)
             # report result to backend
             if num_of_results == 0:
                 return str(task.identifier) + " Empty"

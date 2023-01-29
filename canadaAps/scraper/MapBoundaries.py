@@ -1,6 +1,7 @@
 from .Provider import Provider
 
 from canadaAps.util.convertURLEntities import translate_to_english
+from canadaAps.scraper.Logger import report_progress
 
 class MapBoundaries:
     def __init__(self, source):
@@ -46,14 +47,14 @@ class MapBoundaries:
         if self.provider.get_type() == Provider.rentCanada:
             pass
         elif self.provider.get_type() == Provider.rentFaster:
-            print(f"trying {self.provider.get_type()} with viewport width {viewport_width}")
+            print(report_progress(f"trying {self.provider.get_type()} with viewport width {viewport_width}"))
             # I believe the 'l' value references (a) zoom level and (b) center of the map as lat,long
             # 01/26 - original string started 'l=11%2c45' before changing it to add viewport_width.
             center_lat = (lat1 + lat2) / 2
             center_long = (long1 + long2) / 2
             center_lat_four_decimals = float(str(center_lat)[0:7])
             center_long_four_decimals = float(str(center_long)[0:8])
-            print(center_lat, center_long, '46rm')
+
 
             p1 = "l=11,45.3902,-73.5088&area=45.57384111972111,-73.19057049164543,45.20591177222008,-73.82709087738762&e=zoom_changed&exclude="
             # return p1
@@ -66,7 +67,7 @@ class MapBoundaries:
             # print(translate_to_english(url_with_strange_chars))
             return url_with_strange_chars
         elif self.provider.get_type() == Provider.rentSeeker:
-            print(f"trying {self.provider.get_type()} with viewport width {viewport_width}")
+            print(report_progress(f"trying {self.provider.get_type()} with viewport width {viewport_width}"))
 
             # note: Is there a problem here? See Postman "Ap Scraping Via Postman" / "RentSeeker.ca" / ...
             # Note2 01/26: lat2,long2, lat1, long1 reflects the swLatLong, neLatLong format of the actual website

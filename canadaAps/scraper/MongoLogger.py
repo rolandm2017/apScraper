@@ -24,14 +24,14 @@ db = client["cel_logs"]
 collection = db["scans"]
 
 
-def write_log(task_id, provider, lat, long):
-    log = make_log(task_id, provider, lat, long)
+def write_log(task_id, provider, lat, long, num_of_results):
+    log = make_log(task_id, provider, lat, long, num_of_results)
     print(report_progress("Logged to MongoDB: " + str(log)))
     collection.insert_one(log)
 
 
-def make_log(task_id, provider, lat, long):
-    return {"task_id": task_id, "provider": provider, "lat": lat, "long": long}
+def make_log(task_id, provider, lat, long, num_of_results):
+    return {"task_id": task_id, "provider": provider, "lat": lat, "long": long, "num_of_results": num_of_results}
 
 
 def get_scan_collection():

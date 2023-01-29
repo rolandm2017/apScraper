@@ -32,6 +32,10 @@ def create_app(celery):
     else:
         c = Config
     app.config.from_object(c)
+    app.config['MONGO_CONNECT'] = False
+    # UserWarning: MongoClient opened before fork. Create MongoClient only after forking.
+    # See PyMongo's documentation for details: https://pymongo.readthedocs.io/en/stable/faq.html#is-pymongo-fork-safe
+    # https://stackoverflow.com/questions/41905472/pymongo-create-mongoclient-with-connect-false-or-create-client-after-forking
 
     # Configure celery
     celery.conf.update(app.config)
