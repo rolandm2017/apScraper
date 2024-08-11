@@ -6,8 +6,8 @@ The web scraper is usable as an independent program to scrape apartment data fro
 
 The scraper makes use of Celery to run several concurrent threads, decreasing scraping time from days to a few hours. This could happen even faster but I wanted to be nice to their servers! :-)
 
-You can view the frontend for the Apartments Near Gyms program here: https://github.com/plutownium/gymsFE
+You can view the frontend for the Apartments Near Gyms program here: https://github.com/rolandm2017/gymsFE
 
-And the rest of the backend for it here: https://github.com/plutownium/gymSaas
+And the rest of the backend for it here: https://github.com/rolandm2017/gymSaas
 
 Happy reading!
